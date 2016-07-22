@@ -1,0 +1,141 @@
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  height: 100%;
+}
+.table {
+  font-size: 12pt;
+}
+
+rect.boxbg {
+  stroke: none!important;
+}
+
+.box {
+  font: 10px sans-serif;
+}
+.box line,
+.box rect,
+.box circle {
+  /*fill: #e6e6e6;*/
+  stroke: #12100E;
+  stroke-width: 1px;
+}
+.box .center {
+  stroke-dasharray: 3,3;
+}
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.label {
+  font: 12px sans-serif;
+}
+
+.y.label {
+  font: 12px sans-serif;
+}
+
+circle.bordered {
+  stroke: #E6E6E6;
+  stroke-width: 2px;
+}
+
+circle.bordered.blank {
+  stroke: black;
+}
+
+text.mono {
+  font-size: 9pt;
+  font-family: Consolas, courier;
+  fill: #606060;
+}
+
+.d3-tip {
+  pointer-events: none;
+  font: 10px sans-serif;
+  line-height: 1;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  pointer-events: none;
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  pointer-events: none;
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+.status-icon {
+  text-align: right;
+  vertical-align: middle;
+  float: right;
+  line-height: 30px;
+}
+
+.red {
+  color: #E36A57;
+}
+
+.green {
+  color: #BAD964;
+}
+
+.yellow {
+  color: #FDAE47;
+}
+
+path.redline {
+  fill: none;
+  stroke: #f00;
+}
+
+.seriesLine {
+  fill: none;
+  opacity: .8;
+  stroke-width: 1.5px;
+}
+
+.seriesLine:hover {
+  opacity: 1;
+  stroke-width:3;
+}
+
+.legendEntry {
+  visibility: hidden;
+}
+
+.focus circle {
+  fill: none;
+  stroke: #030303;
+}

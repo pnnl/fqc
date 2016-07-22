@@ -1,0 +1,18 @@
+[
+    {
+        "group_id": "batch-group",
+        "uids": [
+            "single",
+            "t",
+            "te",
+            "tes",
+            "test"
+        ]
+    },
+    {
+        "group_id": "group_00",
+        "uids": [
+            "test_00"
+        ]
+    }
+]

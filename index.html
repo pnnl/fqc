@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>FQC</title>
+    <!--http://www.favicon-generator.org/editor/2016-04-06/67477172bcc9f816dc1e7e7a70d34c4c.ico#editor-->
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="lib/bootstrap-3.3.6-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="lib/flat-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="lib/DataTables/datatables.min.css"/>
+    <link rel="stylesheet" href="style/fqc.css">
+    <script src="lib/jquery-1.12.2.min.js"></script>
+    <script src="lib/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+    <script src="lib/d3/d3.min.js"></script>
+    <script src="lib/d3.tip.v0.6.3.js"></script>
+    <script src="lib/queue.v1.min.js"></script>
+    <script src="lib/d3-legend.min.js"></script>
+    <script src="lib/Highcharts-4.2.5/js/highcharts.js"></script>
+    <script src="lib/Highcharts-4.2.5/js/highcharts-more.js"></script>
+    <script src="lib/Highcharts-4.2.5/js/modules/heatmap.js"></script>
+    <script type="text/javascript" src="lib/DataTables/datatables.min.js"></script>
+
+  </head>
+  <body>
+    <div class="container col-md-12">
+      <div class="col-md-3">
+        <h1>FQC</h1>
+      </div>
+      <div class="col-md-9" id="groupSelector">
+        <br />
+        Group
+      </div>
+      <div class="col-md-9" id="uidSelector">
+        UID
+      </div>
+    </div>
+    <div class="col-md-12">
+      <br />
+    </div>
+    <div class=" col-md-12">
+      <div class="col-md-3">
+        <ul id="metricsNav" class="nav nav-pills nav-stacked">
+        </ul>
+      </div>
+      <div class="col-md-9">
+        <div class="panel panel-default">
+          <div class="panel-body" id="panel_body">
+            <!-- Tab panes -->
+             <div class="tab-content" id="tabContent">
+             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="js/fqc.js"></script>
+  <script src="js/fqc.table.js"></script>
+  <script src="js/fqc.serieschart.js"></script>
+  <script src="js/fqc.heatmap.js"></script>
+  <script src="js/fqc.plateheatmap.js"></script>
+  <script src="js/fqc.arearange.js"></script>
+  <script src="js/theme.js"></script>
+</html>
