@@ -219,7 +219,7 @@ JSON entry:
 }
 ```
 
-![plateheatmap](http://imgur.com/WoAPhIE.png)
+![plateheatmap](http://imgur.com/7QbnaBV.png)
 
 ### Line
 
