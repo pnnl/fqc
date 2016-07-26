@@ -1,19 +1,8 @@
 # FASTQ QA/QC Dashboard
 
-![dashboard](http://i.imgur.com/df51TBN.png)
+![dashboard](http://imgur.com/qHtGhua.png)
 
-Quality assurance largely utilizing existing tools like FastQC, while being
-extensible to include new data sources. Plots have been revamped to include
-the use of modern tools and take advantage of interactivity where applicable.
-
-# TODO
-
-+ [ ] plateheatmap height appears much larger than other plots
-+ [ ] change the name of boxplot to something like iqrplot
-+ [ ] change color theme
-+ [ ] fastqc plot order
-+ [ ] conda packaging
-+ [ ] move to github with license
+We built this to better group FastQC result data across groups where each group is comprised of FASTQs related to an experiment or sequencing batch. Individual samples are grouped into paired-end sets when available and the dashboard's extensibility allows a user to add plots or tables as desired.
 
 # Requires
 
@@ -22,298 +11,207 @@ Python 3. We recommend using [Anaconda](https://www.continuum.io/downloads) to
 install `fqc` and its dependencies. To install:
 
 ```
-conda install -c bioconda python fastqc fqc
+conda install -c bioconda python fastqc
 ```
 
-# Run
+The dashboard reads local files, so install where you will eventually be
+serving the site.
 
 ```
-$ fqc qc test_id test_r1.fastq.gz test_r2.fastq.gz
-[2016-04-08 13:02] Writing data to: ./plot_data/test_id
-[2016-04-08 13:02] Running FastQC.
-[2016-04-08 13:02] Extracting data from FastQC archives
-[2016-04-08 13:02] Processing complete.
+git clone https://github.com/brwnj/fqc.git
+cd fqc
+python setup.py install
 ```
 
-If we run over successive test runs named test_1 and test_2, the output folder
-directory tree of:
+This installs `fqc` command-line tool to process FASTQs and create the
+dashboard.
 
-```
-plot_data/
-├── runs.json
-├── test_1
-│   ├── Per_base_N_content.csv
-│   ├── Per_sequence_GC_content.csv
-│   ├── Per_sequence_quality_scores.csv
-│   ├── R1
-│   │   ├── Adapter_Content.csv
-...
-│   │   └── Sequence_Length_Distribution.csv
-│   ├── R2
-│   │   ├── Adapter_Content.csv
-...
-│   │   └── Sequence_Length_Distribution.csv
-│   ├── Sequence_Length_Distribution.csv
-│   └── config.json
-└── test_2
-    ├── Per_base_N_content.csv
-    ├── Per_sequence_GC_content.csv
-    ├── Per_sequence_quality_scores.csv
-    ├── R1
-    │   ├── Adapter_Content.csv
-...
-    │   └── Sequence_Length_Distribution.csv
-    ├── R2
-    │   ├── Adapter_Content.csv
-...
-    │   └── Sequence_Length_Distribution.csv
-    ├── Sequence_Length_Distribution.csv
-    └── config.json
-```
-
-# Deploy Site
-
-**This needs to be adapted for `conda install`**
-
-Start a local server and navigate to `localhost:8000`:
+Then to deploy a local copy from within the `fqc` directory, you can run:
 
 ```
 python -m http.server
 ```
 
-This will show the test data QC as determined by the data directory in
-`js/fqc.js`:
+And navigate to `localhost:8000`.
+
+By default, this will show the test data QC as determined by the data
+directory in `js/fqc.js`:
 
 ```
 var filePath = "/fqc/tests/data/qc/plot_data/"
 ```
 
+Edit `fqc.js` to your local path *within* the `fqc` directory tree.
+
+# Processing a FASTQ
+
+```
+$ fqc qc group_2016 sample1 test_r1.fastq.gz
+[2016-07-26 13:24 INFO] Writing data to: plot_data/group_2016/sample1
+[2016-07-26 13:24 INFO] Running FastQC
+[2016-07-26 13:27 INFO] Extracting data from FastQC archives
+[2016-07-26 13:27 INFO] Processing of sample1 complete
+```
+
+## Paired-end FASTQs
+
+```
+fqc qc --r2 test_r2.fastq.gz group_2016 sample2 test_r1.fastq.gz
+```
+
 # Files
 
-## runs.json
+## groups.json
 
-Located within the `plot_data` directory, this holds metadata for each run:
+Located within the `plot_data` directory, this holds metadata for each group
+and samples within the groups:
 
 ```
 [
     {
-        "run_id": "test_1",
-        "data_folder": "test_1"
+        "group_id": "group_01",
+        "uids": [
+            "test_01"
+        ]
     },
     {
-        "run_id": "test_2",
-        "data_folder": "test_2"
+        "group_id": "group_00",
+        "uids": [
+            "test_00"
+        ]
     }
 ]
 ```
 
-+ `run_id` is used as the ID in the dropdown
-+ `data_folder` is used as the path to `config.json`
+Renders as:
 
-`fqc` will write the same value for each, but if the user chooses to change
-what is displayed in the browser versus where the data is stored in the
-filesystem.
+![groups](http://imgur.com/UjCux1r.png)
+
+The sample ID and group ID must match the underlying directory tree that is
+built by `fqc qc` and maintained when using `fqc batch` or `fqc add`.
+
+And the directory tree of this simple example:
+
+```
+plot_data/
+├── group_00
+│   └── test_00
+│       ├── R1
+│       ├── R2
+│       └── config.json
+├── group_01
+│   └── test_01
+│       ├── R1
+│       ├── R2
+│       └── config.json
+└── groups.json
+```
 
 ## config.json
 
-Holds metadata for each run inside the run folder, set tab names, and backing
-data. Each entry must have a `tab_name`, `filename`, and `chart_properties`.
+Holds metadata for each sample inside the group folder. Each entry must have a `tab_name`, `filename`, and `chart_properties`.
 
 ### Status
 
-Possible values:
+Possible (meaningful) values are `pass`, `fail`, and `warn`, which render respectively as:
 
-+ pass
-+ fail
-+ warn
+![status](http://imgur.com/bgVpVLL.png | width 150)
 
 ### Table
 
+Example data:
+
+| Measure         | Value                   |
+|-----------------|-------------------------|
+| File type       | Conventional base calls |
+| Encoding        | Sanger / Illumina 1.9   |
+| Total Sequences | 25000                   |
+
+JSON entry:
+
 ```
 {
-    "status": "",
-    "filename": [
-        [
-            "R1",
-            "R1/Basic_Statistics.csv"
-        ],
-        [
-            "R2",
-            "R2/Basic_Statistics.csv"
-        ]
-    ],
-    "tab_name": "Basic Statistics",
+    "filename": "R1/Kmer_Content.csv",
+    "tab_name": "Kmer Content",
+    "status": "warn",
     "chart_properties": {
         "type": "table"
     }
 }
 ```
 
-![basic statistics](http://i.imgur.com/IBkzOT7.png)
+![basic statistics](http://imgur.com/9v7vSYO.png)
 
 ### Heatmap
 
+Example data:
+
+| Tile | Base | Mean               |
+|------|------|--------------------|
+| 1101 | 1    | 0.4305431013906045 |
+| 1101 | 2    | 0.1525106635342368 |
+| 1101 | 3    | 0.0202493599609709 |
+
+JSON entry:
+
 ```
 {
-    "filename": [
-        [
-            "R1",                                       # subplot label
-            "R1/Per_tile_sequence_quality.csv"          # path to file
-        ],
-        [
-            "R2",                                       # subplot label
-            "R2/Per_tile_sequence_quality.csv"          # path to file
-        ]
-    ],
+    "filename": "R1/Per_tile_sequence_quality.csv",
     "tab_name": "Quality by Tile",
+    "status": "pass",
     "chart_properties": {
-        "y_value": "Tile",
+        "type": "heatmap",
+        "subtitle": "Per Tile Average Quality Deviation",
         "x_label": "Position",
-        "value": "Mean",
-        "y_label": "Tile",
-        "shape": "square",
-        "subtitle": "Mean quality per tile",
         "x_value": "Base",
-        "min": -10,
-        "max": 10,
-        "min_color": "",
-        "mid_color": "",
-        "max_color": "",
-        "type": "heatmap"
-    },
-    "status": "pass"
+        "y_label": "Tile",
+        "y_value": "Tile",
+        "shape": "square",
+        "value": "Mean",
+        "min": "-10",
+        "max": "10",
+        "min_color": "#36c",
+        "mid_color": "#ffffff",
+        "max_color": "#dc3912"
+    }
 }
 ```
 
-![heatmap](http://i.imgur.com/2XWjpar.png)
+![heatmap](http://imgur.com/1OArfZz.png)
 
 ### Plate Heatmap
 
 A nicely spaced heatmap specifically for showing trends over sample plates.
 
-### Line
+Example data:
 
-When multiple y-values are passed, line labels are header values.
+| WELL_COL | WELL_ROW | TOTAL_CONTAMINATION | TOTAL_PAIRED_READS | LABEL |
+|----------|----------|---------------------|--------------------|-------|
+| 1        | A        | 6                   | 205                |       |
+| 2        | A        | 14                  | 103                |       |
+| 3        | A        | 1                   | 125                |       |
 
-```
-{
-    "filename": [
-        [
-            "R1",
-            "R1/Per_base_sequence_content.csv"
-        ],
-        [
-            "R2",
-            "R2/Per_base_sequence_content.csv"
-        ]
-    ],
-    "tab_name": "Sequence Content",
-    "chart_properties": {
-        "y_value": [
-            "G",
-            "A",
-            "T",
-            "C"
-        ],
-        "x_label": "Position",
-        "y_label": "Percent",
-        "subtitle": "Sequence content across all bases",
-        "x_value": "Base",
-        "type": "line"
-    },
-    "status": "fail"
-}
-```
-
-
-![multiple line plot](http://i.imgur.com/JDePntm.png)
-
-### Area Range
-
-```
-{
-    "filename": [
-        [
-            "R1",
-            "R1/Per_base_sequence_quality.csv"
-        ],
-        [
-            "R2",
-            "R2/Per_base_sequence_quality.csv"
-        ]
-    ],
-    "tab_name": "Quality by Position",
-    "chart_properties": {
-        "mean": "",
-        "median": "Median",
-        "lower_percentile": "10th Percentile",
-        "x_label": "Position",
-        "upper_quartile": "Upper Quartile",
-        "upper_percentile": "90th Percentile",
-        "lower_quartile": "Lower Quartile",
-        "subtitle": "",
-        "x_value": "Base",
-        "type": "boxplot"
-    },
-    "status": "pass"
-}
-```
-
-![area range](http://i.imgur.com/tM7bgO0.png)
-
-# Adding Plots
-
-Plot data can be added manually to the UID directory then edit the appropriate
-configuration file. If you're adding a new run, you will have to add it to
-`run.json`, but if the run exists, you can add the plot metadata into that
-UIDs `config.json`.
-
-There's also a convenience method that will copy data and update `config.json`
-with a valid JSON entry for the plot type being added.
-
-```
-fqc add --x-value WELL_COL \
-    --y-value WELL_ROW  \
-    --shape circle \
-    --value TOTAL_PAIRED_READS \
-    --label "LABEL" \
-    qc/plot_data/test_add_heatmap/config.json \
-    "Reads by Plate" \
-    heatmap \
-    "Plate 1",plt1_counts.csv "Plate 2",plt2_counts.csv
-```
-
-This appends the following JSON entry onto `qc/plot_data/test_1/config.json`:
+JSON entry:
 
 ```
 {
     "filename": [
         [
             "Plate 1",
-            "counts.csv"
+            "plt1_counts.csv"
         ],
         [
             "Plate 2",
-            "counts.csv"
-        ],
-        [
-            "Plate 3",
-            "counts.csv"
-        ],
-        [
-            "Plate 4",
-            "counts.csv"
+            "plt2_counts.csv"
         ]
     ],
     "tab_name": "Reads by Plate",
-    "status": "",
     "chart_properties": {
-        "type": "heatmap",
-        "subtitle": "",
+        "type": "plateheatmap",
         "x_value": "WELL_COL",
-        "y_value": "WELL_ROW",
-        "x_label": "",
-        "y_label": "",
+        "y_value": [
+            "WELL_ROW"
+        ],
         "shape": "circle",
         "value": "TOTAL_PAIRED_READS",
         "label": "LABEL"
@@ -321,15 +219,165 @@ This appends the following JSON entry onto `qc/plot_data/test_1/config.json`:
 }
 ```
 
-# Testing
+![plateheatmap](http://imgur.com/WoAPhIE.png)
 
-We've run...
+### Line
+
+Example data:
+
+| Quality | Count |
+|---------|-------|
+| 14      | 1.0   |
+| 15      | 0.0   |
+| 16      | 0.0   |
+
+JSON entry:
 
 ```
-fqc qc -o qc test_qc test_r1.fastq.gz test_r2.fastq.gz
-fqc qc -e 'Basic Statistics' -e 'Count by Length' -o qc test_omit_basic_count_by_length test_r1.fastq.gz test_r2.fastq.gz
-fqc qc -e 'Basic Statistics' -e 'Count by Length' -o qc test_add_heatmap test_r1.fastq.gz test_r2.fastq.gz
-fqc add --x-value WELL_COL --y-value WELL_ROW --shape circle --value TOTAL_PAIRED_READS --label "LABEL" qc/plot_data/test_add_heatmap/config.json "Reads by Plate" plateheatmap "Plate 1",plt1_counts.csv "Plate 2",plt2_counts.csv
+{
+    "filename": "R1/Per_sequence_quality_scores.csv",
+    "tab_name": "Quality by Count",
+    "status": "pass",
+    "chart_properties": {
+        "type": "line",
+        "x_label": "Mean Sequence Quality",
+        "x_value": "Quality",
+        "y_label": "Count"
+    }
+}
 ```
 
-After we've verified the output by hand we can then run future tests against that using simply `nosetests` from the main project directory.
+![singleline](http://imgur.com/E0asKqe.png)
+
+When multiple y-values are being plotted:
+
+| Base | G     | A      | T      | C      |
+|------|-------|--------|--------|--------|
+| 1    | 3.832 | 4.148  | 85.424 | 6.596  |
+| 2    | 3.531 | 83.268 | 8.704  | 4.496  |
+| 3    | 2.692 | 9.264  | 4.712  | 83.332 |
+| 4    | 80.14 | 10.252 | 5.152  | 4.456  |
+
+JSON entry:
+
+```
+{
+    "filename": "R1/Per_base_sequence_content.csv",
+    "tab_name": "Sequence Content",
+    "status": "fail",
+    "chart_properties": {
+        "type": "line",
+        "subtitle": "Sequence content across all bases",
+        "x_label": "Position",
+        "x_value": "Base",
+        "y_label": "Percent",
+        "y_value": [
+            "G",
+            "A",
+            "T",
+            "C"
+        ]
+    }
+}
+```
+
+
+![multiplelineplot](http://imgur.com/X9Wx1lz.png)
+
+### Area Range
+
+Example data:
+
+| Base | Mean   | Lower Quartile | Upper Quartile |
+|------|--------|----------------|----------------|
+| 1    | 32.193 | 32.0           | 33.0           |
+| 2    | 32.365 | 32.0           | 33.0           |
+| 3    | 32.570 | 32.0           | 33.0           |
+
+JSON entry:
+
+```
+{
+    "filename": "R1/Per_base_sequence_quality.csv",
+    "tab_name": "Quality by Position",
+    "status": "pass",
+    "chart_properties": {
+        "type": "arearange",
+        "x_label": "Position",
+        "x_value": "Base",
+        "y_label": "Quality (Phred score)",
+        "lower_quartile": "Lower Quartile",
+        "upper_quartile": "Upper Quartile",
+        "mean": "Mean"
+    }
+}
+```
+
+![area range](http://imgur.com/5WZQ6mA.png)
+
+### Plot Tabs
+
+Tabs can be added to the plot area using a list of lists for the `filename` attribute. The first position is the name of the tab while the second is the file path.
+
+```
+"filename": [
+        [
+            "Plate 1",
+            "plt1_counts.csv"
+        ],
+        [
+            "Plate 2",
+            "plt2_counts.csv"
+        ]
+]
+```
+
+Which will render as:
+
+![plottabs](http://imgur.com/3IeMoWi.png)
+
+# Adding Plots
+
+```
+fqc add --x-value WELL_COL \
+    --y-value WELL_ROW  \
+    --shape circle \
+    --value TOTAL_PAIRED_READS \
+    --label "LABEL" \
+    plot_data/group_00/test_00/config.json \
+    "Reads by Plate" \
+    plateheatmap \
+    "Plate 1",plt1_counts.csv "Plate 2",plt2_counts.csv
+```
+
+This copies data into the necessary local folders and appends the following JSON entry onto `plot_data/group_00/test_00/config.json`:
+
+```
+{
+    "filename": [
+        [
+            "Plate 1",
+            "plt1_counts.csv"
+        ],
+        [
+            "Plate 2",
+            "plt2_counts.csv"
+        ]
+    ],
+    "tab_name": "Reads by Plate",
+    "chart_properties": {
+        "type": "plateheatmap",
+        "x_value": "WELL_COL",
+        "y_value": [
+            "WELL_ROW"
+        ],
+        "shape": "circle",
+        "value": "TOTAL_PAIRED_READS",
+        "label": "LABEL"
+    }
+}
+```
+
+## Manual Editting
+
+Plot data can be added manually to the UID directory by adding the data into a given directory and editting the `config.json` for that UID. If you're adding a new run, you will have to add it to `groups.json`.
