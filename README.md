@@ -8,11 +8,19 @@ We built this to better group FastQC result data across groups where each group 
 
 Parsing the table and running `FastQC` is performed with code written for
 Python 3. We recommend using [Anaconda](https://www.continuum.io/downloads) to
-install `fqc` and its dependencies. To install:
+install the FastQC dependency:
 
 ```
-conda install -c bioconda python fastqc
+conda install -c bioconda fastqc
 ```
+
+And if you don't have Python yet:
+
+```
+conda install python
+```
+
+# Install
 
 The dashboard reads local files, so install where you will eventually be
 serving the site.
@@ -115,7 +123,7 @@ Holds metadata for each sample inside the group folder. Each entry must have a `
 
 Possible (meaningful) values are `pass`, `fail`, and `warn`, which render respectively as:
 
-![status](http://imgur.com/bgVpVLL.png | width 150)
+<img src="http://imgur.com/bgVpVLL.png" height="175"/>
 
 ### Table
 
