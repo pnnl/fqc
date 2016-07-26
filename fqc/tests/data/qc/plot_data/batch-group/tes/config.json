@@ -34,11 +34,8 @@
             "x_label": "Position",
             "x_value": "Base",
             "y_label": "Quality (Phred score)",
-            "lower_percentile": "10th Percentile",
             "lower_quartile": "Lower Quartile",
-            "upper_percentile": "90th Percentile",
             "upper_quartile": "Upper Quartile",
-            "median": "Median",
             "mean": "Mean"
         }
     },
@@ -63,7 +60,12 @@
             "y_label": "Tile",
             "y_value": "Tile",
             "shape": "square",
-            "value": "Mean"
+            "value": "Mean",
+            "min": "-10",
+            "max": "10",
+            "min_color": "#36c",
+            "mid_color": "#ffffff",
+            "max_color": "#dc3912"
         }
     },
     {
@@ -124,6 +126,17 @@
             "x_label": "Position",
             "x_value": "Base",
             "y_label": "Percent N"
+        }
+    },
+    {
+        "filename": "Sequence_Length_Distribution.csv",
+        "tab_name": "Count by Length",
+        "status": "pass",
+        "chart_properties": {
+            "type": "line",
+            "x_label": "Length (nt)",
+            "x_value": "Length",
+            "y_label": "Count"
         }
     },
     {
