@@ -32,7 +32,7 @@ class ChartProperties(object):
         self.shape = shape
         self.value = value
         self.label = label
-        self.min = mininum
+        self.min = minimum
         self.max = maximum
         self.min_color = min_color
         self.mid_color = mid_color
