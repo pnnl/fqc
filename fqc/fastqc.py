@@ -134,7 +134,7 @@ class Fastqc(object):
                             web_tab.tab_name = "Quality by Tile"
                             web_tab.chart_properties = ChartProperties("heatmap", subtitle="Per Tile Average Quality Deviation",
                                 shape="square", x_label="Position", x_value=toks[1], y_label="Tile", y_value=toks[0], value=toks[2],
-                                mininum="-10", maximum="10", min_color="#36c", mid_color="#ffffff", max_color="#dc3912")
+                                minimum="-10", maximum="10", min_color="#36c", mid_color="#ffffff", max_color="#dc3912")
                     # Base, G, A, T, C
                     elif filename == "Per_base_sequence_content.csv":
                         if "R1" in idx:
