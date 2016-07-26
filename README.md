@@ -121,11 +121,11 @@ Possible (meaningful) values are `pass`, `fail`, and `warn`, which render respec
 
 Example data:
 
-| Measure         | Value                   |
-|-----------------|-------------------------|
-| File type       | Conventional base calls |
-| Encoding        | Sanger / Illumina 1.9   |
-| Total Sequences | 25000                   |
+| Sequence | Count | PValue      | Obs/Exp Max | Max Obs/Exp Position |
+|----------|-------|-------------|-------------|----------------------|
+| ACCAGCCC | 10    | 0.005942726 | 244.00002   | 2                    |
+| GGGGTTAG | 20    | 6.252667E-7 | 244.00002   | 8                    |
+| GATGCGAG | 175   | 0.0         | 244.00002   | 8                    |
 
 JSON entry:
 
