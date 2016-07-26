@@ -126,8 +126,7 @@ class Fastqc(object):
                         if "R1" in idx:
                             web_tab.tab_name = "Quality by Position"
                             web_tab.chart_properties = ChartProperties("arearange", x_label="Position", x_value=toks[0],
-                                y_label="Quality (Phred score)", lower_percentile=toks[5], lower_quartile=toks[3],
-                                median=toks[2], upper_quartile=toks[4], upper_percentile=toks[6], mean=toks[1])
+                                y_label="Quality (Phred score)", lower_quartile=toks[3], upper_quartile=toks[4], mean=toks[1])
                     # Quality, Count
                     elif filename == "Per_tile_sequence_quality.csv":
                         if "R1" in idx:
@@ -240,7 +239,7 @@ class Fastqc(object):
             subprocess.check_call(cmd)
             self.extract_data(tempd)
         except subprocess.CalledProcessError:
-            logging.critical("Failed executing FastQC.")
+            logging.critical("Failed executing FastQC")
             logging.critical("Command was: %s" % " ".join(cmd))
             raise
         finally:

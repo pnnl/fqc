@@ -35,7 +35,7 @@ def run_qc(gid, uid, r1, r2=None, adapter=None, contaminants=None, exclude=[], k
         threads (Optional[str]): number of threads to use
     """
     qc_obj = Fastqc(gid, uid, r1, r2=r2, out_dir=out_dir)
-    logging.info("Running FastQC.")
+    logging.info("Running FastQC")
     # executes fastqc and writes data tables
     qc_obj.run(adapter=adapter, contaminants=contaminants, kmers=kmers, threads=threads)
     # exclude user requested tabs
@@ -63,7 +63,7 @@ def run_qc(gid, uid, r1, r2=None, adapter=None, contaminants=None, exclude=[], k
         group_data.insert(0, {'group_id': gid, 'uids': [uid]})
     with open(group_config, 'w') as fh:
         print(json.dumps(group_data, indent=4, sort_keys=True), file=fh)
-    logging.info("Processing of %s complete." % uid)
+    logging.info("Processing of %s complete" % uid)
 
 
 def run_batch_qc(gid, input_dir, adapter=None, contaminants=None, exclude=[], kmers=8, out_dir=".", threads=1):
@@ -95,8 +95,8 @@ def run_batch_qc(gid, input_dir, adapter=None, contaminants=None, exclude=[], km
 
 
 def run_add(config, name, plot_type, csv, status=None, x_value=None, y_value=None, x_label=None,
-    y_label=None, subtitle=None, lower_percentile=None, lower_quartile=None, upper_percentile=None,
-    upper_quartile=None, median=None, mean=None, shape=None, value=None, label=None):
+    y_label=None, subtitle=None, lower_quartile=None, upper_quartile=None, mean=None, shape=None,
+    value=None, label=None):
     """Copies the CSV into the directory containing the config file if it does not already exist
     there, then either appends an appropriate entry onto the existing config JSON or creates a new
     file.
@@ -112,28 +112,20 @@ def run_add(config, name, plot_type, csv, status=None, x_value=None, y_value=Non
         x_label (Optional[str]): x-label to be drawn on dashboard; defaults to `x_value`
         y_label (Optional[str]): y-label to be drawn on dashboard; defaults to `y_value`
         subtitle (Optional[str]): subtitle to be drawn on dashboard
-        lower_percentile (Optional[str]): arearange specific option; header label in CSV for lower
-            percentile
         lower_quartile (Optional[str]): arearange specific option; header label in CSV for lower
             quartile value
-        upper_percentile (Optional[str]): arearange specific option; header label in CSV for upper
-            percentile
         upper_quartile (Optional[str]): arearange specific option; header label in CSV for upper
             quartile value
-        median (Optional[str]): arearange specific option; header label in CSV for median value
         mean (Optional[str]): arearange specific option; header label in CSV for mean value
         shape (Optional[str]): internal plateheatmap shape; either square or circle
         value (Optional[str]): value label in CSV to be plotted in heatmap
         label (Optional[str]): optional heatmap label header to mark individual coordinates
-
-
-    chart_properties['y_value'] = y_value[0] if len(y_value) == 1 else y_value
     """
     filename = add_csv_input(csv, os.path.dirname(config))
     web_tab = WebTab(filename, name, status,
                      ChartProperties(plot_type, subtitle, x_label, x_value, y_label, y_value,
-                                     lower_percentile, lower_quartile, upper_percentile,
-                                     upper_quartile, median, mean, shape, value, label))
+                                     lower_quartile, upper_quartile, mean, shape, value,
+                                     label))
     # append onto configuration file
     if os.path.exists(config):
         shutil.copy(config, config + '.bak')
@@ -257,15 +249,10 @@ def main():
     chart_props.add_argument("--subtitle", metavar="STR", help="chart subtitle")
 
     arearange = add_p.add_argument_group("arearange")
-    arearange.add_argument("--lower-percentile", metavar="STR",
-        help="header label of lower percentile value")
     arearange.add_argument("--lower-quartile", metavar="STR",
         help="header label of lower quartile value")
-    arearange.add_argument("--upper-percentile", metavar="STR",
-        help="header label of upper percentile value")
     arearange.add_argument("--upper-quartile", metavar="STR",
         help="header label of upper quartile value")
-    arearange.add_argument("--median", metavar="STR", help="header label of median value")
     arearange.add_argument("--mean", metavar="STR", help="header label of mean value")
 
     heatmap = add_p.add_argument_group("heatmap")
@@ -295,10 +282,9 @@ def main():
     elif args.subparser_name == "add":
         run_add(args.config, args.name, args.plot_type, args.csv, status=args.status,
             x_value=args.x_value, y_value=args.y_value, x_label=args.x_label, y_label=args.y_label,
-            subtitle=args.subtitle, lower_percentile=args.lower_percentile,
-            lower_quartile=args.lower_quartile, upper_percentile=args.upper_percentile,
-            upper_quartile=args.upper_quartile, median=args.median, shape=args.shape,
-            value=args.value, label=args.label)
+            subtitle=args.subtitle, lower_quartile=args.lower_quartile,
+            upper_quartile=args.upper_quartile, shape=args.shape, value=args.value,
+            label=args.label)
     else:
         p.print_help()
 

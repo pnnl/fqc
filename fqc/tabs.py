@@ -14,20 +14,16 @@ class ChartProperties(object):
     shape circle square
     """
     def __init__(self, plot_type="", subtitle="", x_label="", x_value="", y_label="", y_value="",
-        lower_percentile="", lower_quartile="", upper_percentile="", upper_quartile="",
-        median="", mean="", shape="", value="", label="", minimum="", maximum="", min_color="",
-        mid_color="", max_color=""):
+        lower_quartile="", upper_quartile="", mean="", shape="", value="", label="",
+        minimum="", maximum="", min_color="", mid_color="", max_color=""):
         self.type = plot_type
         self.subtitle = subtitle
         self.x_label = x_label
         self.x_value = x_value
         self.y_label = y_label
         self.y_value = y_value
-        self.lower_percentile = lower_percentile
         self.lower_quartile = lower_quartile
-        self.upper_percentile = upper_percentile
         self.upper_quartile = upper_quartile
-        self.median = median
         self.mean = mean
         self.shape = shape
         self.value = value
@@ -61,16 +57,10 @@ class ChartProperties(object):
             od['y_label'] = self.y_label
         if self.y_value:
             od['y_value'] = self.y_value
-        if self.lower_percentile:
-            od['lower_percentile'] = self.lower_percentile
         if self.lower_quartile:
             od['lower_quartile'] = self.lower_quartile
-        if self.upper_percentile:
-            od['upper_percentile'] = self.upper_percentile
         if self.upper_quartile:
             od['upper_quartile'] = self.upper_quartile
-        if self.median:
-            od['median'] = self.median
         if self.mean:
             od['mean'] = self.mean
         if self.shape:
