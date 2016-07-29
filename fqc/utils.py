@@ -3,6 +3,7 @@ import logging
 import os
 import re
 import shutil
+import string
 import sys
 
 
@@ -104,7 +105,7 @@ def add_csv_input(csv, dst):
                 name, filepath = i.split(",")
             # just use the filename for the subplot label
             else:
-                name = os.path.basename(i).rpartition(".")[0]
+                name = string.capwords(os.path.basename(i).rpartition(".")[0].replace("_", " "))
                 filepath = i
             filepath = os.path.abspath(os.path.expanduser(filepath))
             if not os.path.exists(filepath):
