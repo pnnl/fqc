@@ -94,7 +94,7 @@ def run_batch_qc(gid, input_dir, adapter=None, contaminants=None, exclude=[], km
     logging.info("Batch processing is complete.")
 
 
-def run_add(config, name, plot_type, csv, status=None, x_value=None, y_value=None, x_label=None,
+def run_add(config, name, plot_type, csv, prepend=False, status=None, x_value=None, y_value=None, x_label=None,
     y_label=None, subtitle=None, lower_quartile=None, upper_quartile=None, mean=None, shape=None,
     value=None, label=None):
     """Copies the CSV into the directory containing the config file if it does not already exist
@@ -106,6 +106,7 @@ def run_add(config, name, plot_type, csv, status=None, x_value=None, y_value=Non
         name (str): name being used in the tab on the dashboard
         plot_type (str): type of chart being created ['line', 'table', 'heatmap', 'plateheatmap', 'arearange']
         csv (str): file path to data file being added to dashboard
+        prepend (Optional[bool]): add new plot as first tab in dashboard
         status (Optional[str]): image icon to be displayed on tab [None, 'warn', 'pass', 'fail']
         x_value (Optional[str]): header label in CSV containing the x-values
         y_value (Optional[str]): header label in CSV containing the y-values
@@ -131,7 +132,10 @@ def run_add(config, name, plot_type, csv, status=None, x_value=None, y_value=Non
         shutil.copy(config, config + '.bak')
         logging.info("Saving backup: %s" % config + '.bak')
         tab_data = import_json(config)
-        tab_data.append(web_tab.to_dict())
+        if prepend:
+            tab_data.insert(0, web_tab.to_dict())
+        else:
+            tab_data.append(web_tab.to_dict())
         try:
             with open(config, 'w') as fh:
                 print(json.dumps(tab_data, indent=4), file=fh)
@@ -235,6 +239,7 @@ def main():
     add_p.add_argument("csv", metavar="CSV", nargs="+",
         help=("CSV data file that is being added; if more than one is being plotted as subplots, "
               "use name,file.csv convention, e.g. 'Plate 1',pla1.cnt.csv 'Plate 2',pla2.cnt.csv"))
+    add_p.add_argument("--prepend", action="store_true", help="add the new plot as the first tab")
     add_p.add_argument("--status", choices=['pass', 'fail', 'warn'], help="tab status indicator")
 
     data_props = add_p.add_argument_group("data properties")
@@ -274,17 +279,18 @@ def main():
 
     if args.subparser_name == "qc":
         run_qc(args.gid, args.uid, args.r1, r2=args.r2, adapter=args.adapter,
-            contaminants=args.contaminants, exclude=args.exclude, kmers=args.kmers,
-            out_dir=args.out_dir, threads=args.threads)
+               contaminants=args.contaminants, exclude=args.exclude, kmers=args.kmers,
+               out_dir=args.out_dir, threads=args.threads)
     elif args.subparser_name == "batch-qc":
         run_batch_qc(args.gid, args.input_dir, adapter=args.adapter, contaminants=args.contaminants,
-            exclude=args.exclude, kmers=args.kmers, out_dir=args.out_dir, threads=args.threads)
+                     exclude=args.exclude, kmers=args.kmers, out_dir=args.out_dir,
+                     threads=args.threads)
     elif args.subparser_name == "add":
-        run_add(args.config, args.name, args.plot_type, args.csv, status=args.status,
-            x_value=args.x_value, y_value=args.y_value, x_label=args.x_label, y_label=args.y_label,
-            subtitle=args.subtitle, lower_quartile=args.lower_quartile,
-            upper_quartile=args.upper_quartile, shape=args.shape, value=args.value,
-            label=args.label)
+        run_add(args.config, args.name, args.plot_type, args.csv, prepend=args.prepend,
+                status=args.status, x_value=args.x_value, y_value=args.y_value,
+                x_label=args.x_label, y_label=args.y_label, subtitle=args.subtitle,
+                lower_quartile=args.lower_quartile, upper_quartile=args.upper_quartile,
+                shape=args.shape, value=args.value, label=args.label)
     else:
         p.print_help()
 
