@@ -238,7 +238,9 @@ def main():
     add_p.add_argument("plot_type", choices=['arearange', 'heatmap', 'plateheatmap', 'line', 'table'])
     add_p.add_argument("csv", metavar="CSV", nargs="+",
         help=("CSV data file that is being added; if more than one is being plotted as subplots, "
-              "use name,file.csv convention, e.g. 'Plate 1',pla1.cnt.csv 'Plate 2',pla2.cnt.csv"))
+              "use name,file.csv convention, e.g. 'Plate 1',plate_1.csv 'Plate 2',plate_2.csv, "
+              "or simply plate_1.csv plate_2.csv and let `add` convert them to tabs named Plate 1 "
+              "and Plate 2 from the file's basename"))
     add_p.add_argument("--prepend", action="store_true", help="add the new plot as the first tab")
     add_p.add_argument("--status", choices=['pass', 'fail', 'warn'], help="tab status indicator")
 
