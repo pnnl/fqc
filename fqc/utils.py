@@ -118,12 +118,13 @@ def add_csv_input(csv, dst):
             filename.append([name, os.path.basename(filepath)])
     # no subplots
     else:
-        if "," in csv:
-            filename = os.path.abspath(csv.partition(",")[-1])
+        if "," in csv[0]:
+            filename = os.path.abspath(csv[0].partition(",")[-1])
         else:
-            filename = os.path.abspath(csv)
+            filename = os.path.abspath(csv[0])
         if not os.path.exists(filename):
             sys.exit("Input file does not exist: %s" % filename)
         copy_file(filename, os.path.join(dst, os.path.basename(filename)))
         filename = os.path.basename(filename)
+        logging.info(filename)
     return filename
