@@ -82,7 +82,7 @@ def fastqs_from_dir(input_dir):
 def copy_file(src, dst):
     if not os.path.exists(dst):
         logging.info("Copying %s to %s" % (src, dst))
-        shutil.copy(src, dst)
+        shutil.copy2(src, dst)
 
 
 def add_csv_input(csv, dst):
