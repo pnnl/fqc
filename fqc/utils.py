@@ -5,6 +5,7 @@ import re
 import shutil
 import string
 import sys
+from stat import ST_ATIME, ST_MTIME
 
 
 def parser_file_exists(parser, arg):
@@ -82,7 +83,10 @@ def fastqs_from_dir(input_dir):
 def copy_file(src, dst):
     if not os.path.exists(dst):
         logging.info("Copying %s to %s" % (src, dst))
-        shutil.copy2(src, dst)
+        shutil.copy(src, dst)
+        # update the modified time of this file
+        st = os.stat(dst)
+        os.utime(dst, (st[ST_ATIME], st[ST_MTIME] + 5))
 
 
 def add_csv_input(csv, dst):
