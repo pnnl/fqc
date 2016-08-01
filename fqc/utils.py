@@ -101,7 +101,7 @@ def add_csv_input(csv, dst):
     Returns:
         file path or list of tab name, file paths suitable for WebTab.filename
     """
-    if len(csv) > 1:
+    if isinstance(csv, list) and len(csv) > 1:
         filename = []
         # 'Plate 1',plate_1_counts.csv 'Plate 2',plate_2_counts.csv
         for i in csv:
@@ -118,10 +118,10 @@ def add_csv_input(csv, dst):
             filename.append([name, os.path.basename(filepath)])
     # no subplots
     else:
-        if "," in csv[0]:
-            filename = os.path.abspath(csv[0].partition(",")[-1])
+        if "," in csv:
+            filename = os.path.abspath(csv.partition(",")[-1])
         else:
-            filename = os.path.abspath(csv[0])
+            filename = os.path.abspath(csv)
         if not os.path.exists(filename):
             sys.exit("Input file does not exist: %s" % filename)
         copy_file(filename, os.path.join(dst, os.path.basename(filename)))
