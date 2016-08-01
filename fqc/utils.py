@@ -126,5 +126,4 @@ def add_csv_input(csv, dst):
             sys.exit("Input file does not exist: %s" % filename)
         copy_file(filename, os.path.join(dst, os.path.basename(filename)))
         filename = os.path.basename(filename)
-        logging.info(filename)
     return filename

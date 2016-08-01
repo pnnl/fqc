@@ -107,12 +107,17 @@ class WebTab(object):
 
     def to_dict(self):
         od = OrderedDict()
-        # paired-end
-        if isinstance(self.filename[0], list):
-            od['filename'] = self.filename
-        # single-end; just need the filename
+        # list as filename
+        if isinstance(self.filename, list):
+            # paired-end
+            if isinstance(self.filename[0], list):
+                od['filename'] = self.filename
+            # single-end; just need the filename
+            else:
+                od['filename'] = self.filename[1]
+        # string as filename
         else:
-            od['filename'] = self.filename[1]
+            od['filename'] = self.filename
         if self.tab_name:
             od['tab_name'] = self.tab_name
         else:
