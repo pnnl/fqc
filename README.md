@@ -204,7 +204,7 @@ JSON entry:
 }
 ```
 
-![heatmap](resources/heatmap.png)
+![heatmap](resources/heatmap_alt.png)
 
 ### Plate Heatmap
 
