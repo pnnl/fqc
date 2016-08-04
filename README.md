@@ -1,6 +1,19 @@
+# Contents:
+
+<!-- TOC depthFrom:1 depthTo:1 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [FASTQ QA/QC Dashboard](#fastq-qaqc-dashboard)
+- [Requires](#requires)
+- [Install](#install)
+- [Processing a FASTQ](#processing-a-fastq)
+- [Support Files](#support-files)
+- [Adding Plots](#adding-plots)
+
+<!-- /TOC -->
+
 # FASTQ QA/QC Dashboard
 
-![dashboard](http://imgur.com/qHtGhua.png)
+![dashboard](resources/dashboard.png)
 
 We built this to better group FastQC result data across groups where each group is comprised of FASTQs related to an experiment or sequencing batch. Individual samples are grouped into paired-end sets when available and the dashboard's extensibility allows a user to add plots or tables as desired.
 
@@ -49,9 +62,15 @@ directory in `js/fqc.js`:
 var filePath = "/fqc/tests/data/qc/plot_data/"
 ```
 
-Edit `fqc.js` to your local path *within* the `fqc` directory tree.
+Edit `fqc.js` to your local path **within** the `fqc` directory tree.
 
 # Processing a FASTQ
+
+The first time this is run, it will build the entire backend of the site.
+Additional FASTQs being written to the same output directory are added to
+the backend according to Group ID and UID.
+
+## Single-end FASTQ
 
 ```
 $ fqc qc group_2016 sample1 test_r1.fastq.gz
@@ -67,7 +86,7 @@ $ fqc qc group_2016 sample1 test_r1.fastq.gz
 fqc qc --r2 test_r2.fastq.gz group_2016 sample2 test_r1.fastq.gz
 ```
 
-# Files
+# Support Files
 
 ## groups.json
 
@@ -93,7 +112,7 @@ and samples within the groups:
 
 Renders as:
 
-![groups](http://imgur.com/UjCux1r.png)
+![groups](resources/groups_json_example.png)
 
 The sample ID and group ID must match the underlying directory tree that is
 built by `fqc qc` and maintained when using `fqc batch` or `fqc add`.
@@ -123,7 +142,7 @@ Holds metadata for each sample inside the group folder. Each entry must have a `
 
 Possible (meaningful) values are `pass`, `fail`, and `warn`, which render respectively as:
 
-<img src="http://imgur.com/bgVpVLL.png" height="175"/>
+<img src="resources/status.png" height="175"/>
 
 ### Table
 
@@ -148,7 +167,7 @@ JSON entry:
 }
 ```
 
-![basic statistics](http://imgur.com/9v7vSYO.png)
+![basic statistics](resources/table.png)
 
 ### Heatmap
 
@@ -185,7 +204,7 @@ JSON entry:
 }
 ```
 
-![heatmap](http://imgur.com/1OArfZz.png)
+![heatmap](resources/heatmap.png)
 
 ### Plate Heatmap
 
@@ -227,7 +246,7 @@ JSON entry:
 }
 ```
 
-![plateheatmap](http://imgur.com/7QbnaBV.png)
+![plateheatmap](resources/plateheatmap.png)
 
 ### Line
 
@@ -255,7 +274,7 @@ JSON entry:
 }
 ```
 
-![singleline](http://imgur.com/E0asKqe.png)
+![singleline](resources/line.png)
 
 When multiple y-values are being plotted:
 
@@ -290,7 +309,7 @@ JSON entry:
 ```
 
 
-![multiplelineplot](http://imgur.com/X9Wx1lz.png)
+![multiplelineplot](resources/multipleline.png)
 
 ### Area Range
 
@@ -321,7 +340,7 @@ JSON entry:
 }
 ```
 
-![area range](http://imgur.com/5WZQ6mA.png)
+![area range](resources/arearange.png)
 
 ### Plot Tabs
 
@@ -342,7 +361,7 @@ Tabs can be added to the plot area using a list of lists for the `filename` attr
 
 Which will render as:
 
-![plottabs](http://imgur.com/3IeMoWi.png)
+![plottabs](resources/plot_tabs.png)
 
 # Adding Plots
 
