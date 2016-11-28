@@ -222,6 +222,10 @@ function makeChart(domObjId, chart_properties, filename) {
 		heatmap(domObjId, chart_properties, filename)
 	else if(chart_properties.type == "plateheatmap")
 		plateheatmap(domObj, chart_properties, filename)
+	else if(chart_properties.type == "histogram")
+		histogramchart(domObjId, chart_properties, filename)
+	else if(chart_properties.type == "bar")
+		barchart(domObjId, chart_properties, filename)
 	else {
 		domObj.append("div")
 			.attr("class", "alert alert-danger")

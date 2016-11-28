@@ -3,18 +3,11 @@
 plateheatmap = function(domObj, chart_properties, filename) {
   var margin = { top: 50, right: 250, bottom: 100, left: 40 },
       width = d3.select(".tab-content").node().getBoundingClientRect().width - margin.left - margin.right,
-      // colors = ["#ffffff","#EAEFF9", "#C1D1EF", "#ADC1EA", "#99B2E5", "#84A3E0", "#7093DB", "#4775D1", "#3366CC"];
       colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"];
-
-    function googlec(n) {
-      var colores_g = ["#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00", "#b82e2e", "#316395", "#994499", "#22aa99", "#aaaa11", "#6633cc", "#e67300", "#8b0707", "#651067", "#329262", "#5574a6", "#3b3eac"];
-      return colores_g[n % colores_g.length];
-    }
 
   var plateheatmapChart = function(file) {
     d3.csv(file,
     function(d) {
-      // console.log(d);
       return {
         x: d[chart_properties.x_value],
         y: d[chart_properties.y_value],
@@ -24,7 +17,7 @@ plateheatmap = function(domObj, chart_properties, filename) {
     },
     function(error, data) {
       if (error) throw error;
-      // console.log(filename);
+
       var xVals = {};
       data.forEach(function(d){
         xVals[d.x] = 1;
@@ -36,16 +29,6 @@ plateheatmap = function(domObj, chart_properties, filename) {
         yVals[d.y] = 1;
       });
       yVals = Object.keys(yVals);
-
-      var labels = {};
-      data.forEach(function(d){
-        if(d.label)
-          labels[d.label] = 1;
-      });
-      labels = Object.keys(labels);
-
-      // var labelColor = d3.scale.category20()
-      //   .domain(labels);
 
       var gridSize = Math.floor(width / xVals.length);
       var buckets = 9;
@@ -104,7 +87,7 @@ plateheatmap = function(domObj, chart_properties, filename) {
           .attr("width", gridSize)
           .attr("height", gridSize)
           .style("fill", colors[0])
-          .style("stroke", function(d) { return d.label ? googlec(labels.indexOf(d.label)) : "#f3f3f3"; })
+          .style("stroke", function(d) { return d.label ? chart_properties.colors[d.label] : "#f3f3f3"; })
           .style("stroke-width", function(d) { return d.label ? 5 : 2; })
           .on('mouseover', tip.show)
           .on('mouseout', tip.hide);
