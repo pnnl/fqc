@@ -97,7 +97,7 @@ histogramchart = function(domObjId, chart_properties, filename) {
       //           [169.5, 67.3], [160.0, 75.5], [172.7, 68.2], [162.6, 61.4], [157.5, 76.8],
       //           [176.5, 71.8], [164.4, 55.5], [160.7, 48.6], [174.0, 66.4], [163.8, 67.3]];
       // var series = histogram(data, 10);
-      
+
       var series = histogram(
         csv.map(function(d) {
           return [d[chart_properties.x_value], d[chart_properties.y_value]]
@@ -117,7 +117,10 @@ histogramchart = function(domObjId, chart_properties, filename) {
               x: -20 //center
           },
           xAxis: {
-            gridLineWidth: 1
+            gridLineWidth: 1,
+            title: {
+                text: chart_properties['x_label']
+            }
           },
           yAxis: {
               title: {
