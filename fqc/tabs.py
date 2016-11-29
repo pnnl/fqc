@@ -10,12 +10,10 @@ class WebTabExc(Exception):
 
 class ChartProperties(object):
     """
-    type heatmap, plateheatmap, line, table, arearange
-    shape circle square
     """
     def __init__(self, plot_type="", subtitle="", x_label="", x_value="", y_label="", y_value="",
-        lower_quartile="", upper_quartile="", mean="", shape="", value="", label="",
-        minimum="", maximum="", min_color="", mid_color="", max_color=""):
+        lower_quartile="", upper_quartile="", mean="", value="", label="",
+        minimum="", maximum="", min_color="", mid_color="", max_color="", colors="", step=10):
         self.type = plot_type
         self.subtitle = subtitle
         self.x_label = x_label
@@ -25,7 +23,6 @@ class ChartProperties(object):
         self.lower_quartile = lower_quartile
         self.upper_quartile = upper_quartile
         self.mean = mean
-        self.shape = shape
         self.value = value
         self.label = label
         self.min = minimum
@@ -33,6 +30,8 @@ class ChartProperties(object):
         self.min_color = min_color
         self.mid_color = mid_color
         self.max_color = max_color
+        self.colors = colors
+        self.step = step
 
     def add_y_value(self, val):
         if self.y_value:
@@ -63,8 +62,6 @@ class ChartProperties(object):
             od['upper_quartile'] = self.upper_quartile
         if self.mean:
             od['mean'] = self.mean
-        if self.shape:
-            od['shape'] = self.shape
         if self.value:
             od['value'] = self.value
         if self.label:
@@ -79,6 +76,11 @@ class ChartProperties(object):
             od['mid_color'] = self.mid_color
         if self.max_color:
             od['max_color'] = self.max_color
+        if self.colors:
+            od['colors'] = self.colors
+        if self.step:
+            if self.type == "histogram":
+                od['step'] = self.step
         return od
 
 

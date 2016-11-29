@@ -144,30 +144,68 @@ Possible (meaningful) values are `pass`, `fail`, and `warn`, which render respec
 
 <img src="resources/status.png" height="175"/>
 
-### Table
+### Area Range
 
 Example data:
 
-| Sequence | Count | PValue      | Obs/Exp Max | Max Obs/Exp Position |
-|----------|-------|-------------|-------------|----------------------|
-| ACCAGCCC | 10    | 0.005942726 | 244.00002   | 2                    |
-| GGGGTTAG | 20    | 6.252667E-7 | 244.00002   | 8                    |
-| GATGCGAG | 175   | 0.0         | 244.00002   | 8                    |
+| Base | Mean   | Lower Quartile | Upper Quartile |
+|------|--------|----------------|----------------|
+| 1    | 32.193 | 32.0           | 33.0           |
+| 2    | 32.365 | 32.0           | 33.0           |
+| 3    | 32.570 | 32.0           | 33.0           |
 
 JSON entry:
 
 ```
 {
-    "filename": "R1/Kmer_Content.csv",
-    "tab_name": "Kmer Content",
-    "status": "warn",
+    "filename": "R1/Per_base_sequence_quality.csv",
+    "tab_name": "Quality by Position",
+    "status": "pass",
     "chart_properties": {
-        "type": "table"
+        "type": "arearange",
+        "x_label": "Position",
+        "x_value": "Base",
+        "y_label": "Quality (Phred score)",
+        "lower_quartile": "Lower Quartile",
+        "upper_quartile": "Upper Quartile",
+        "mean": "Mean"
     }
 }
 ```
 
-![basic statistics](resources/table.png)
+![area range](resources/arearange.png)
+
+### Bar
+
+Example data:
+
+| POSITION | READ_LENGTH |
+|----------|-------------|
+| 0        | 51          |
+| 1        | 45          |
+| 2        | 54          |
+| 3        | 52          |
+
+JSON entry:
+
+```
+    {
+        "tab_name": "Read Length Bar Chart",
+        "filename": "histogram.csv",
+        "chart_properties": {
+            "y_label": "Read Length",
+            "x_value": "POSITION",
+            "y_value": [
+                "READ_LENGTH"
+            ],
+            "subtitle": "Read Length",
+            "x_label": "Position",
+            "type": "bar"
+        }
+    }
+```
+
+![bar](resources/bar.png)
 
 ### Heatmap
 
@@ -206,47 +244,38 @@ JSON entry:
 
 ![heatmap](resources/heatmap_alt.png)
 
-### Plate Heatmap
-
-A nicely spaced heatmap specifically for showing trends over sample plates.
+### Histogram
 
 Example data:
 
-| WELL_COL | WELL_ROW | TOTAL_CONTAMINATION | TOTAL_PAIRED_READS | LABEL |
-|----------|----------|---------------------|--------------------|-------|
-| 1        | A        | 6                   | 205                |       |
-| 2        | A        | 14                  | 103                |       |
-| 3        | A        | 1                   | 125                |       |
+| POSITION | READ_LENGTH |
+|----------|-------------|
+| 0        | 51          |
+| 1        | 45          |
+| 2        | 54          |
+| 3        | 52          |
 
 JSON entry:
 
 ```
 {
-    "filename": [
-        [
-            "Plate 1",
-            "plt1_counts.csv"
-        ],
-        [
-            "Plate 2",
-            "plt2_counts.csv"
-        ]
-    ],
-    "tab_name": "Reads by Plate",
+    "tab_name": "Read Length Histogram",
+    "filename": "histogram.csv",
     "chart_properties": {
-        "type": "plateheatmap",
-        "x_value": "WELL_COL",
+        "y_label": "Count",
+        "x_value": "POSITION",
         "y_value": [
-            "WELL_ROW"
+            "READ_LENGTH"
         ],
-        "shape": "circle",
-        "value": "TOTAL_PAIRED_READS",
-        "label": "LABEL"
+        "step": 10,
+        "subtitle": "Read Length Distribution",
+        "x_label": "Read Lengths",
+        "type": "histogram"
     }
 }
 ```
 
-![plateheatmap](resources/plateheatmap.png)
+![histogram](resources/histogram.png)
 
 ### Line
 
@@ -308,39 +337,79 @@ JSON entry:
 }
 ```
 
-
 ![multiplelineplot](resources/multipleline.png)
 
-### Area Range
+### Plate Heatmap
+
+A nicely spaced heatmap specifically for showing trends over sample plates. Definitions for colors are optional.
 
 Example data:
 
-| Base | Mean   | Lower Quartile | Upper Quartile |
-|------|--------|----------------|----------------|
-| 1    | 32.193 | 32.0           | 33.0           |
-| 2    | 32.365 | 32.0           | 33.0           |
-| 3    | 32.570 | 32.0           | 33.0           |
+| WELL_COL | WELL_ROW | TOTAL_CONTAMINATION | TOTAL_PAIRED_READS | LABEL   |
+|----------|----------|---------------------|--------------------|---------|
+| 1        | A        | 6                   | 205                |         |
+| 2        | A        | 14                  | 103                | (+)CTRL |
+| 3        | A        | 0                   | 125                | (-)CTRL |
 
 JSON entry:
 
 ```
 {
-    "filename": "R1/Per_base_sequence_quality.csv",
-    "tab_name": "Quality by Position",
-    "status": "pass",
+    "filename": [
+        [
+            "Plate 1",
+            "plt1_counts.csv"
+        ],
+        [
+            "Plate 2",
+            "plt2_counts.csv"
+        ]
+    ],
+    "tab_name": "Plate With Color Defs",
+    "status": "fail",
     "chart_properties": {
-        "type": "arearange",
-        "x_label": "Position",
-        "x_value": "Base",
-        "y_label": "Quality (Phred score)",
-        "lower_quartile": "Lower Quartile",
-        "upper_quartile": "Upper Quartile",
-        "mean": "Mean"
+        "type": "plateheatmap",
+        "x_value": "WELL_COL",
+        "y_value": [
+            "WELL_ROW"
+        ],
+        "shape": "circle",
+        "value": "TOTAL_PAIRED_READS",
+        "label": "LABEL",
+        "colors": {
+            "(-)CTRL": "#1f77b4",
+            "(+)CTRL": "#d62728"
+        }
     }
 }
 ```
 
-![area range](resources/arearange.png)
+![plateheatmap](resources/plateheatmap.png)
+
+### Table
+
+Example data:
+
+| Sequence | Count | PValue      | Obs/Exp Max | Max Obs/Exp Position |
+|----------|-------|-------------|-------------|----------------------|
+| ACCAGCCC | 10    | 0.005942726 | 244.00002   | 2                    |
+| GGGGTTAG | 20    | 6.252667E-7 | 244.00002   | 8                    |
+| GATGCGAG | 175   | 0.0         | 244.00002   | 8                    |
+
+JSON entry:
+
+```
+{
+    "filename": "R1/Kmer_Content.csv",
+    "tab_name": "Kmer Content",
+    "status": "warn",
+    "chart_properties": {
+        "type": "table"
+    }
+}
+```
+
+![basic statistics](resources/table.png)
 
 ### Plot Tabs
 

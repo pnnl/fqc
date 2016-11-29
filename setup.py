@@ -2,6 +2,7 @@ import io
 from os.path import dirname, join
 from setuptools import setup
 
+
 def get_version(relpath):
   '''Read version info from a file without importing it'''
   for line in io.open(join(dirname(__file__), relpath), encoding='cp437'):
@@ -12,14 +13,15 @@ def get_version(relpath):
       elif "'" in line:
         return line.split("'")[1]
 
+
 setup(
     name='fqc',
     version=get_version("fqc/__init__.py"),
-    url='',
-    license='',
+    url='https://github.com/brwnj/fqc',
+    license='MIT',
     author='Joe Brown',
     author_email='joe.brown@pnnl.gov',
-    description='',
+    description='Extensible plotting utility geared towards sequence quality control',
     long_description='',
     packages=['fqc'],
     install_requires=[

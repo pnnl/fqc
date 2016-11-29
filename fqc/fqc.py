@@ -94,9 +94,9 @@ def run_batch_qc(gid, input_dir, adapter=None, contaminants=None, exclude=[], km
     logging.info("Batch processing is complete.")
 
 
-def run_add(config, name, plot_type, csv, prepend=False, status=None, x_value=None, y_value=None, x_label=None,
-    y_label=None, subtitle=None, lower_quartile=None, upper_quartile=None, mean=None, shape=None,
-    value=None, label=None):
+def run_add(config, name, plot_type, csv, prepend=False, status=None, x_value=None, y_value=None,
+            x_label=None, y_label=None, subtitle=None, lower_quartile=None, upper_quartile=None,
+            mean=None, value=None, label=None, colors=None, step=10):
     """Copies the CSV into the directory containing the config file if it does not already exist
     there, then either appends an appropriate entry onto the existing config JSON or creates a new
     file.
@@ -118,15 +118,25 @@ def run_add(config, name, plot_type, csv, prepend=False, status=None, x_value=No
         upper_quartile (Optional[str]): arearange specific option; header label in CSV for upper
             quartile value
         mean (Optional[str]): arearange specific option; header label in CSV for mean value
-        shape (Optional[str]): internal plateheatmap shape; either square or circle
         value (Optional[str]): value label in CSV to be plotted in heatmap
         label (Optional[str]): optional heatmap label header to mark individual coordinates
+        colors (Optional[str]): optional color definitions for observable labels
+        step (Optional[int]): histogram step
     """
     filename = add_csv_input(csv, os.path.dirname(config))
+    if colors:
+        # '(-)CTRL:#1f77b4,(+)CTRL:#d62728'
+        try:
+            colors_dict = dict([i.split(":") for i in colors.split(",")])
+        except ValueError:
+            logging.warning("Unable to parse colors (%s) in key:value pairs" % colors)
+            colors_dict = None
+        colors = colors_dict
+
     web_tab = WebTab(filename, name, status,
                      ChartProperties(plot_type, subtitle, x_label, x_value, y_label, y_value,
-                                     lower_quartile, upper_quartile, mean, shape, value,
-                                     label))
+                                     lower_quartile, upper_quartile, mean, value, label,
+                                     colors=colors, step=step))
     # append onto configuration file
     if os.path.exists(config):
         shutil.copy(config, config + '.bak')
@@ -235,24 +245,24 @@ def main():
     # add plots
     add_p.add_argument("config", metavar="JSON", help="config onto which we're appending or creating")
     add_p.add_argument("name", metavar="STR", help="chart tab name")
-    add_p.add_argument("plot_type", choices=['arearange', 'heatmap', 'plateheatmap', 'line', 'table'])
+    add_p.add_argument("plot_type", choices=['arearange', 'bar', 'heatmap', 'histogram', 'line', 'plateheatmap', 'table'])
     add_p.add_argument("csv", metavar="CSV", nargs="+",
         help=("CSV data file that is being added; if more than one is being plotted as subplots, "
               "use name,file.csv convention, e.g. 'Plate 1',plate_1.csv 'Plate 2',plate_2.csv, "
               "or simply plate_1.csv plate_2.csv and let `add` convert them to tabs named Plate 1 "
               "and Plate 2 from the file's basename"))
     add_p.add_argument("--prepend", action="store_true", help="add the new plot as the first tab")
-    add_p.add_argument("--status", choices=['pass', 'fail', 'warn'], help="tab status indicator")
+    add_p.add_argument("--status", choices=['pass', 'warn', 'fail'], help="tab status indicator")
 
     data_props = add_p.add_argument_group("data properties")
-    data_props.add_argument("--x-value", metavar="STR",
+    data_props.add_argument("-x", "--x-value", metavar="STR",
         help="header label in CSV representing x-value")
-    data_props.add_argument("--y-value", metavar="STR", action="append",
+    data_props.add_argument("-y", "--y-value", metavar="STR", action="append",
         help="header label in CSV representing y-value; can be specified more than one time for line plot")
 
     chart_props = add_p.add_argument_group("chart properties")
-    chart_props.add_argument("--x-label", metavar="STR", help="default is x-value")
-    chart_props.add_argument("--y-label", metavar="STR", help="default is y-value")
+    chart_props.add_argument("-X", "--x-label", metavar="STR", help="default is x-value")
+    chart_props.add_argument("-Y", "--y-label", metavar="STR", help="default is y-value")
     chart_props.add_argument("--subtitle", metavar="STR", help="chart subtitle")
 
     arearange = add_p.add_argument_group("arearange")
@@ -262,13 +272,18 @@ def main():
         help="header label of upper quartile value")
     arearange.add_argument("--mean", metavar="STR", help="header label of mean value")
 
-    heatmap = add_p.add_argument_group("heatmap")
-    heatmap.add_argument("--shape", choices=['circle', 'square'], default='square',
-        help="shape applied to colors inside the heatmap")
-    heatmap.add_argument("--value", metavar="STR", help="header label of plot value")
+    heatmap = add_p.add_argument_group("heatmap,plateheatmap")
+    heatmap.add_argument("-v", "--value", metavar="STR", help="header label of plot value")
+
+    histogram = add_p.add_argument_group("histogram")
+    histogram.add_argument("--step", metavar="INT", default=10, type=int,
+        help="the bin size, or resolution, for the histogram")
 
     # plateheatmap
-    heatmap.add_argument("--label", metavar="STR", help="optional header label for coordinate highlights within the heatmap")
+    heatmap.add_argument("--label", metavar="STR",
+        help="optional header label for coordinate highlights within the heatmap")
+    heatmap.add_argument("--colors", metavar="STR",
+        help="optional colors for observable labels, e.g. for NCTRL and PCTRL you would use NCTRL:#1f77b4,PCTRL:#d62728")
 
     args = p.parse_args()
 
@@ -292,7 +307,7 @@ def main():
                 status=args.status, x_value=args.x_value, y_value=args.y_value,
                 x_label=args.x_label, y_label=args.y_label, subtitle=args.subtitle,
                 lower_quartile=args.lower_quartile, upper_quartile=args.upper_quartile,
-                shape=args.shape, value=args.value, label=args.label)
+                value=args.value, label=args.label, colors=args.colors, step=args.step)
     else:
         p.print_help()
 
