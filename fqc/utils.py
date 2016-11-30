@@ -31,7 +31,7 @@ def import_json(json_file):
         with open(json_file) as fh:
             try:
                 data = json.load(fh)
-            except json.decoder.JSONDecoderError:
+            except json.decoder.JSONDecodeError:
                 logging.critical("%s was not in valid JSON format" % json_file)
                 raise
     else:
