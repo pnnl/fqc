@@ -19,7 +19,12 @@
             "mean": "Mean",
             "median": "Median",
             "y_label": "Quality (Phred score)",
-            "lower_quartile": "Lower Quartile"
+            "lower_quartile": "Lower Quartile",
+            "zones": [
+              {"value": 30, "color": "#e5afb0"},
+              {"value": 34, "color": "#e6d6b1"},
+              {"color": "#b0e5b1"}
+            ]
         },
         "filename": "R1/Per_base_sequence_quality.csv",
         "tab_name": "Quality by Position"

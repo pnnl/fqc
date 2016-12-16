@@ -12,6 +12,7 @@ arearange = function(domObjId, chart_properties, filename) {
     var data = [];
     var ranges = [];
     var averages = [];
+    var zones = [];
 
     csv.forEach(function(x, i) {
       // console.log(x);
@@ -58,7 +59,8 @@ arearange = function(domObjId, chart_properties, filename) {
             zIndex: 1,
             marker: {
                 enabled: false
-            }
+            },
+            zones: chart_properties.zones
         }, {
             name: "Inter-Quartile Range",
             data: ranges,
@@ -67,7 +69,8 @@ arearange = function(domObjId, chart_properties, filename) {
             linkedTo: ':previous',
             color: Highcharts.getOptions().colors[0],
             fillOpacity: 0.3,
-            zIndex: 0
+            zIndex: 0,
+            zones: chart_properties.zones
         }]
     });
   });
