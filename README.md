@@ -179,9 +179,12 @@ There is support for adding zones as well, if you're going for the classic FastQ
 
 ```
 {
-    "filename": "R1/Per_base_sequence_quality.csv",
+    "filename": [
+        ["R1", "R1/Per_base_sequence_quality.csv"],
+        ["R2", "R2/Per_base_sequence_quality.csv"]
+    ],
     "tab_name": "Quality by Position",
-    "status": "pass",
+    "status": "warn",
     "chart_properties": {
         "type": "arearange",
         "x_label": "Position",

@@ -60,7 +60,7 @@ arearange = function(domObjId, chart_properties, filename) {
             marker: {
                 enabled: false
             },
-            zones: chart_properties.zones
+            zones: chart_properties['zones']
         }, {
             name: "Inter-Quartile Range",
             data: ranges,
@@ -70,7 +70,7 @@ arearange = function(domObjId, chart_properties, filename) {
             color: Highcharts.getOptions().colors[0],
             fillOpacity: 0.3,
             zIndex: 0,
-            zones: chart_properties.zones
+            zones: chart_properties['zones']
         }]
     });
   });
