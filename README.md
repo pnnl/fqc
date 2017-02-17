@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/63971118.svg)](https://zenodo.org/badge/latestdoi/63971118)
+
 # Contents:
 
 <!-- TOC depthFrom:1 depthTo:1 withLinks:1 updateOnSave:1 orderedList:0 -->
