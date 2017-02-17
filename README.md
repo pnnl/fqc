@@ -175,6 +175,32 @@ JSON entry:
 
 ![area range](resources/arearange.png)
 
+There is support for adding zones as well, if you're going for the classic FastQC look and feel:
+
+```
+{
+    "filename": "R1/Per_base_sequence_quality.csv",
+    "tab_name": "Quality by Position",
+    "status": "pass",
+    "chart_properties": {
+        "type": "arearange",
+        "x_label": "Position",
+        "x_value": "Base",
+        "y_label": "Quality (Phred score)",
+        "lower_quartile": "Lower Quartile",
+        "upper_quartile": "Upper Quartile",
+        "mean": "Mean",
+        "zones": [
+            {"value": 30, "color": "#e5afb0"},
+            {"value": 34, "color": "#e6d6b1"},
+            {"color": "#b0e5b1"}
+        ]
+    }
+}
+```
+
+![area range](resources/arearange_zones.png)
+
 ### Bar
 
 Example data:

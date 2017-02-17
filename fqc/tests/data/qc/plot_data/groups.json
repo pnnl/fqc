@@ -1,12 +1,18 @@
 [
     {
-        "group_id": "batch-group",
+        "group_id": "Important Experiment",
         "uids": [
-            "single",
-            "t",
-            "te",
-            "tes",
-            "test"
+            "Sample 1",
+            "Sample 2",
+            "Sample 3",
+            "Sample 4",
+            "Sample 5"
+        ]
+    },
+    {
+        "group_id": "Experiment 2",
+        "uids": [
+            "TESTONE"
         ]
     }
 ]
