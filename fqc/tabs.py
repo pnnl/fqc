@@ -11,9 +11,10 @@ class WebTabExc(Exception):
 class ChartProperties(object):
     """
     """
-    def __init__(self, plot_type="", subtitle="", x_label="", x_value="", y_label="", y_value="",
-        lower_quartile="", upper_quartile="", mean="", value="", label="",
-        minimum="", maximum="", min_color="", mid_color="", max_color="", colors="", step=10):
+    def __init__(self, plot_type="", subtitle="", x_label="", x_value="",
+        y_label="", y_value="", lower_quartile="", upper_quartile="", mean="",
+        value="", label="", minimum="", maximum="", min_color="", mid_color="",
+        max_color="", colors="", step=10, zones=[]):
         self.type = plot_type
         self.subtitle = subtitle
         self.x_label = x_label
@@ -32,6 +33,7 @@ class ChartProperties(object):
         self.max_color = max_color
         self.colors = colors
         self.step = step
+        self.zones = zones
 
     def add_y_value(self, val):
         if self.y_value:
@@ -81,6 +83,9 @@ class ChartProperties(object):
         if self.step:
             if self.type == "histogram":
                 od['step'] = self.step
+        if self.zones:
+            if self.type == "arearange":
+                od['zones'] = self.zones
         return od
 
 

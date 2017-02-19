@@ -137,6 +137,7 @@ def run_add(config, name, plot_type, csv, prepend=False, status=None, x_value=No
                      ChartProperties(plot_type, subtitle, x_label, x_value, y_label, y_value,
                                      lower_quartile, upper_quartile, mean, value, label,
                                      colors=colors, step=step))
+
     # append onto configuration file
     if os.path.exists(config):
         shutil.copy(config, config + '.bak')

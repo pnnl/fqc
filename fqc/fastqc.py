@@ -126,7 +126,9 @@ class Fastqc(object):
                         if "R1" in idx:
                             web_tab.tab_name = "Quality by Position"
                             web_tab.chart_properties = ChartProperties("arearange", x_label="Position", x_value=toks[0],
-                                y_label="Quality (Phred score)", lower_quartile=toks[3], upper_quartile=toks[4], mean=toks[1])
+                                y_label="Quality (Phred score)", lower_quartile=toks[3], upper_quartile=toks[4],
+                                mean=toks[1], zones=[{"value": 30, "color": "#e5afb0"}, {"value": 34, "color": "#e6d6b1"}, {"color": "#b0e5b1"}])
+
                     # Quality, Count
                     elif filename == "Per_tile_sequence_quality.csv":
                         if "R1" in idx:
