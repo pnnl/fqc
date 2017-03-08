@@ -1,4 +1,3 @@
-[![DOI](https://zenodo.org/badge/63971118.svg)](https://zenodo.org/badge/latestdoi/63971118)
 
 # Contents:
 
