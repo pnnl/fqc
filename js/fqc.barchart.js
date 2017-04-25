@@ -47,7 +47,7 @@ barchart = function(domObjId, chart_properties, filename) {
       var xValues = csv.map(function (d) { return d[chart_properties.x_value]; });
 
       var data = csv.map(function(d) {
-        return [+d[chart_properties.x_value], +d[chart_properties.y_value]];
+        return [chart_properties.x_value, +d[chart_properties.y_value]];
       });
 
       $("#"+domObjId).highcharts({
