@@ -34,6 +34,13 @@ def run_qc(gid, uid, r1, r2=None, adapter=None, contaminants=None, exclude=[], k
         out_dir (Optional[str]): parent directory of server; holds 'plot_data' and child folders
         threads (Optional[str]): number of threads to use
     """
+    if not r2:
+        if os.path.exists(r1.replace("_R1", "_R2")):
+            r2 = r1.replace("_R1", "_R2")
+        elif os.path.exists(r1.replace("_r1", "_r2")):
+            r2 = r1.replace("_r1", "_r2")
+        if r2:
+            logging.info("Found R2: %s" % r2)
     qc_obj = Fastqc(gid, uid, r1, r2=r2, out_dir=out_dir)
     logging.info("Running FastQC")
     # executes fastqc and writes data tables
@@ -96,7 +103,8 @@ def run_batch_qc(gid, input_dir, adapter=None, contaminants=None, exclude=[], km
 
 def run_add(config, name, plot_type, csv, prepend=False, status=None, x_value=None, y_value=None,
             x_label=None, y_label=None, subtitle=None, lower_quartile=None, upper_quartile=None,
-            mean=None, value=None, label=None, colors=None, step=10):
+            mean=None, value=None, label=None, colors=None, step=10, min_value=None, min_color=None,
+            mid_color=None, max_value=None, max_color=None):
     """Copies the CSV into the directory containing the config file if it does not already exist
     there, then either appends an appropriate entry onto the existing config JSON or creates a new
     file.
@@ -104,7 +112,7 @@ def run_add(config, name, plot_type, csv, prepend=False, status=None, x_value=No
     Args:
         config (str): file path to config.json
         name (str): name being used in the tab on the dashboard
-        plot_type (str): type of chart being created ['line', 'table', 'heatmap', 'plateheatmap', 'arearange']
+        plot_type (str): type of chart being created
         csv (str): file path to data file being added to dashboard
         prepend (Optional[bool]): add new plot as first tab in dashboard
         status (Optional[str]): image icon to be displayed on tab [None, 'warn', 'pass', 'fail']
@@ -122,6 +130,11 @@ def run_add(config, name, plot_type, csv, prepend=False, status=None, x_value=No
         label (Optional[str]): optional heatmap label header to mark individual coordinates
         colors (Optional[str]): optional color definitions for observable labels
         step (Optional[int]): histogram step
+        min_value (Optional[int]): optional heatmap minimum value threshold for color map
+        min_color (Optional[str]): optional heatmap minimum color
+        mid_color (Optional[str]): optional heatmap mid color for color map
+        max_value (Optional[int]): optional heatmap maximum value threshold for color map
+        max_color (Optional[str]): optional heatmap maximum color
     """
     filename = add_csv_input(csv, os.path.dirname(config))
     if colors:
@@ -136,7 +149,9 @@ def run_add(config, name, plot_type, csv, prepend=False, status=None, x_value=No
     web_tab = WebTab(filename, name, status,
                      ChartProperties(plot_type, subtitle, x_label, x_value, y_label, y_value,
                                      lower_quartile, upper_quartile, mean, value, label,
-                                     colors=colors, step=step))
+                                     minimum=min_value, maximum=max_value, min_color=min_color,
+                                     mid_color=mid_color, max_color=max_color, colors=colors,
+                                     step=step))
 
     # append onto configuration file
     if os.path.exists(config):
@@ -195,7 +210,8 @@ def main():
     qc_p.add_argument("r1", metavar="R1", type=lambda x: parser_file_exists(p, x),
         help="path to R1 FASTQ file")
     qc_p.add_argument("--r2", metavar="R2", type=lambda x: parser_file_exists(p, x),
-        help="path to R2 FASTQ file")
+        help=("path to R2 FASTQ file; if not specified, attempts will be made to locate R2 within "
+              "the same directory as R1"))
     qc_p.add_argument("-a", "--adapter", metavar="STR",
         help=("a non-default file containing a list of adapter sequences which will be explicity "
               "searched against the library -- must contain sets of named adapters in the form "
@@ -275,6 +291,11 @@ def main():
 
     heatmap = add_p.add_argument_group("heatmap,plateheatmap")
     heatmap.add_argument("-v", "--value", metavar="STR", help="header label of plot value")
+    heatmap.add_argument("--min-value", metavar="INT", type=int, help="sets minimum value threshold; default is determined by input")
+    heatmap.add_argument("--min-color", metavar="STR", help="sets minimum color")
+    heatmap.add_argument("--mid-color", metavar="STR", help="sets middle color of color map")
+    heatmap.add_argument("--max-value", metavar="INT", type=int, help="sets maximum value threshold; default is determined by input")
+    heatmap.add_argument("--max-color", metavar="STR", help="sets maximum color")
 
     histogram = add_p.add_argument_group("histogram")
     histogram.add_argument("--step", metavar="INT", default=10, type=int,
@@ -308,7 +329,9 @@ def main():
                 status=args.status, x_value=args.x_value, y_value=args.y_value,
                 x_label=args.x_label, y_label=args.y_label, subtitle=args.subtitle,
                 lower_quartile=args.lower_quartile, upper_quartile=args.upper_quartile,
-                value=args.value, label=args.label, colors=args.colors, step=args.step)
+                value=args.value, label=args.label, colors=args.colors, step=args.step,
+                min_value=args.min_value, min_color=args.min_color, mid_color=args.mid_color,
+                max_value=args.max_value, max_color=args.max_color)
     else:
         p.print_help()
 
