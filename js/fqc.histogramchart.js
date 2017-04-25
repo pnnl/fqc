@@ -19,7 +19,7 @@ histogramchart = function(domObjId, chart_properties, filename) {
 
       // Group down
       for (i = 0; i < data.length; i++) {
-          x = Math.floor(data[i][1] / step) * step;
+          x = Math.floor(data[i] / step) * step;
           if (!histo[x]) {
               histo[x] = 0;
           }
@@ -100,11 +100,13 @@ histogramchart = function(domObjId, chart_properties, filename) {
 
       var series = histogram(
         csv.map(function(d) {
-          return [d[chart_properties.x_value], d[chart_properties.y_value]]
+          return d[chart_properties.x_value]
         })
       , chart_properties.step);
 
       var xValues = csv.map(function (d) { return d[chart_properties.x_value]; });
+
+      console.log(series)
 
       $("#"+domObjId).highcharts({
           chart: {
@@ -129,7 +131,7 @@ histogramchart = function(domObjId, chart_properties, filename) {
           },
           tooltip: {
               formatter: function() {
-                  return chart_properties.x_label + ": <b>" + this.x + " - " + (this.x + chart_properties.step) + '</b><br>' + chart_properties.y_label + ": <b>" + this.y + "</b>";
+                  return chart_properties.x_label + ": <b>" + this.x + " - " + (this.x + chart_properties.step) + '</b><br>Frequency: <b>' + this.y + "</b>";
               }
           },
           legend: {
