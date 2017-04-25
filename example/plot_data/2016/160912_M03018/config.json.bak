@@ -1,0 +1,281 @@
+[
+    {
+        "tab_name": "Run Stats",
+        "filename": "160912_summary.csv",
+        "chart_properties": {
+            "type": "table"
+        }
+    },
+    {
+        "tab_name": "Read Distribution",
+        "filename": "160912_lorenz.csv",
+        "chart_properties": {
+            "x_label": "Fraction of Samples",
+            "type": "line",
+            "x_value": "FractionOfSamples",
+            "y_label": "Fraction of On Target Reads",
+            "y_value": [
+                "Equal",
+                "Actual"
+            ]
+        }
+    },
+    {
+        "tab_name": "Quality by Position",
+        "filename": [
+            [
+                "R1",
+                "R1/Per_base_sequence_quality.csv"
+            ],
+            [
+                "R2",
+                "R2/Per_base_sequence_quality.csv"
+            ]
+        ],
+        "chart_properties": {
+            "y_label": "Quality (Phred score)",
+            "upper_quartile": "Upper Quartile",
+            "mean": "Mean",
+            "lower_quartile": "Lower Quartile",
+            "x_label": "Position",
+            "type": "arearange",
+            "x_value": "Base",
+            "zones": [
+                {
+                    "value": 30,
+                    "color": "#e5afb0"
+                },
+                {
+                    "value": 34,
+                    "color": "#e6d6b1"
+                },
+                {
+                    "color": "#b0e5b1"
+                }
+            ]
+        },
+        "status": "fail"
+    },
+    {
+        "tab_name": "Quality by Tile",
+        "filename": [
+            [
+                "R1",
+                "R1/Per_tile_sequence_quality.csv"
+            ],
+            [
+                "R2",
+                "R2/Per_tile_sequence_quality.csv"
+            ]
+        ],
+        "chart_properties": {
+            "subtitle": "Per Tile Average Quality Deviation",
+            "min": "-10",
+            "max": "10",
+            "min_color": "#36c",
+            "x_label": "Position",
+            "mid_color": "#ffffff",
+            "x_value": "Base",
+            "value": "Mean",
+            "y_label": "Tile",
+            "y_value": "Tile",
+            "type": "heatmap",
+            "max_color": "#dc3912"
+        },
+        "status": "fail"
+    },
+    {
+        "tab_name": "Quality by Count",
+        "filename": "Per_sequence_quality_scores.csv",
+        "chart_properties": {
+            "x_label": "Mean Sequence Quality",
+            "type": "line",
+            "x_value": "Quality",
+            "y_label": "Count"
+        },
+        "status": "pass"
+    },
+    {
+        "tab_name": "Sequence Content",
+        "filename": [
+            [
+                "R1",
+                "R1/Per_base_sequence_content.csv"
+            ],
+            [
+                "R2",
+                "R2/Per_base_sequence_content.csv"
+            ]
+        ],
+        "chart_properties": {
+            "subtitle": "Sequence content across all bases",
+            "y_label": "Percent",
+            "y_value": [
+                "G",
+                "A",
+                "T",
+                "C"
+            ],
+            "x_label": "Position",
+            "type": "line",
+            "x_value": "Base"
+        },
+        "status": "fail"
+    },
+    {
+        "tab_name": "GC Content",
+        "filename": "Per_sequence_GC_content.csv",
+        "chart_properties": {
+            "x_label": "GC Content",
+            "type": "line",
+            "x_value": "GC Content",
+            "y_label": "Count"
+        },
+        "status": "fail"
+    },
+    {
+        "tab_name": "N Content",
+        "filename": "Per_base_N_content.csv",
+        "chart_properties": {
+            "x_label": "Position",
+            "type": "line",
+            "x_value": "Base",
+            "y_label": "Percent N"
+        },
+        "status": "pass"
+    },
+    {
+        "tab_name": "Duplication Levels",
+        "filename": [
+            [
+                "R1",
+                "R1/Sequence_Duplication_Levels.csv"
+            ],
+            [
+                "R2",
+                "R2/Sequence_Duplication_Levels.csv"
+            ]
+        ],
+        "chart_properties": {
+            "subtitle": "26% remaining after deduplication",
+            "y_label": "Percent",
+            "y_value": [
+                "Deduplicated",
+                "Total"
+            ],
+            "x_label": "Duplication Level",
+            "type": "line",
+            "x_value": "Duplication Level"
+        },
+        "status": "fail"
+    },
+    {
+        "tab_name": "Adapter Content",
+        "filename": [
+            [
+                "R1",
+                "R1/Adapter_Content.csv"
+            ],
+            [
+                "R2",
+                "R2/Adapter_Content.csv"
+            ]
+        ],
+        "chart_properties": {
+            "x_label": "Position",
+            "type": "line",
+            "x_value": "Position",
+            "y_label": "Percent",
+            "y_value": [
+                "Illumina Universal",
+                "Illumina Small RNA",
+                "Nextera Transposase",
+                "SOLID Small RNA"
+            ]
+        },
+        "status": "pass"
+    },
+    {
+        "tab_name": "Abundance by Plate",
+        "filename": "160912_plate_1.csv",
+        "chart_properties": {
+            "value": "TOTAL_PAIRED_READS",
+            "y_label": "WELL_ROW",
+            "y_value": [
+                "WELL_ROW"
+            ],
+            "colors": {
+                "UNUSED": "#000000"
+            },
+            "x_label": "WELL_COL",
+            "type": "plateheatmap",
+            "x_value": "WELL_COL",
+            "label": "LABEL"
+        }
+    },
+    {
+        "tab_name": "Barcode Counts",
+        "filename": "160912_top50barcodes.csv",
+        "chart_properties": {
+            "x_label": "Barcode",
+            "type": "bar",
+            "x_value": "Barcode",
+            "y_label": "Count",
+            "y_value": [
+                "Count"
+            ]
+        }
+    },
+    {
+        "tab_name": "Barcode Counts",
+        "filename": "160912_top50barcodes.csv",
+        "chart_properties": {
+            "x_label": "Barcode",
+            "type": "bar",
+            "x_value": "Barcode",
+            "y_label": "Count",
+            "y_value": [
+                "Count"
+            ]
+        }
+    },
+    {
+        "tab_name": "Barcode Counts",
+        "filename": "160912_top50barcodes.csv",
+        "chart_properties": {
+            "x_label": "Barcode",
+            "type": "bar",
+            "x_value": "Barcode",
+            "y_label": "Count",
+            "y_value": [
+                "Count"
+            ]
+        }
+    },
+    {
+        "filename": "160912_top50barcodes.csv",
+        "tab_name": "Barcode Counts",
+        "chart_properties": {
+            "x_label": "Barcode",
+            "type": "bar",
+            "x_value": "Barcode",
+            "y_label": "Count",
+            "y_value": [
+                "Count"
+            ]
+        }
+    },
+    {
+        "filename": "160912_top50barcodes.csv",
+        "tab_name": "Barcode Counts",
+        "chart_properties": {
+            "type": "bar",
+            "x_value": "Barcode",
+            "x_label": "Barcode",
+            "y_value": [
+                "Count"
+            ],
+            "y_label": "Count"
+        }
+    }
+]
