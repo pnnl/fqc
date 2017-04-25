@@ -1,0 +1,198 @@
+[
+    {
+        "filename": "160919_summary.csv",
+        "tab_name": "Run Stats",
+        "chart_properties": {
+            "type": "table"
+        }
+    },
+    {
+        "tab_name": "Read Distribution",
+        "filename": "160919_lorenz.csv",
+        "chart_properties": {
+            "y_label": "Fraction of On Target Reads",
+            "type": "line",
+            "y_value": [
+                "Equal",
+                "Actual"
+            ],
+            "x_value": "FractionOfSamples",
+            "x_label": "Fraction of Samples"
+        }
+    },
+    {
+        "chart_properties": {
+            "zones": [
+                {
+                    "color": "#e5afb0",
+                    "value": 30
+                },
+                {
+                    "color": "#e6d6b1",
+                    "value": 34
+                },
+                {
+                    "color": "#b0e5b1"
+                }
+            ],
+            "lower_quartile": "Lower Quartile",
+            "x_label": "Position",
+            "upper_quartile": "Upper Quartile",
+            "type": "arearange",
+            "y_label": "Quality (Phred score)",
+            "x_value": "Base",
+            "mean": "Mean"
+        },
+        "filename": [
+            [
+                "R1",
+                "R1/Per_base_sequence_quality.csv"
+            ],
+            [
+                "R2",
+                "R2/Per_base_sequence_quality.csv"
+            ]
+        ],
+        "tab_name": "Quality by Position",
+        "status": "fail"
+    },
+    {
+        "chart_properties": {
+            "min": "-10",
+            "value": "Mean",
+            "y_label": "Tile",
+            "x_value": "Base",
+            "max": "10",
+            "type": "heatmap",
+            "max_color": "#dc3912",
+            "y_value": "Tile",
+            "subtitle": "Per Tile Average Quality Deviation",
+            "mid_color": "#ffffff",
+            "min_color": "#36c",
+            "x_label": "Position"
+        },
+        "filename": [
+            [
+                "R1",
+                "R1/Per_tile_sequence_quality.csv"
+            ],
+            [
+                "R2",
+                "R2/Per_tile_sequence_quality.csv"
+            ]
+        ],
+        "tab_name": "Quality by Tile",
+        "status": "fail"
+    },
+    {
+        "chart_properties": {
+            "y_label": "Count",
+            "type": "line",
+            "x_value": "Quality",
+            "x_label": "Mean Sequence Quality"
+        },
+        "filename": "Per_sequence_quality_scores.csv",
+        "tab_name": "Quality by Count",
+        "status": "pass"
+    },
+    {
+        "chart_properties": {
+            "type": "line",
+            "x_label": "Position",
+            "y_label": "Percent",
+            "y_value": [
+                "G",
+                "A",
+                "T",
+                "C"
+            ],
+            "x_value": "Base",
+            "subtitle": "Sequence content across all bases"
+        },
+        "filename": [
+            [
+                "R1",
+                "R1/Per_base_sequence_content.csv"
+            ],
+            [
+                "R2",
+                "R2/Per_base_sequence_content.csv"
+            ]
+        ],
+        "tab_name": "Sequence Content",
+        "status": "fail"
+    },
+    {
+        "chart_properties": {
+            "y_label": "Count",
+            "type": "line",
+            "x_value": "GC Content",
+            "x_label": "GC Content"
+        },
+        "filename": "Per_sequence_GC_content.csv",
+        "tab_name": "GC Content",
+        "status": "fail"
+    },
+    {
+        "chart_properties": {
+            "y_label": "Percent N",
+            "type": "line",
+            "x_value": "Base",
+            "x_label": "Position"
+        },
+        "filename": "Per_base_N_content.csv",
+        "tab_name": "N Content",
+        "status": "fail"
+    },
+    {
+        "chart_properties": {
+            "type": "line",
+            "x_label": "Duplication Level",
+            "y_label": "Percent",
+            "y_value": [
+                "Deduplicated",
+                "Total"
+            ],
+            "x_value": "Duplication Level",
+            "subtitle": "33% remaining after deduplication"
+        },
+        "filename": [
+            [
+                "R1",
+                "R1/Sequence_Duplication_Levels.csv"
+            ],
+            [
+                "R2",
+                "R2/Sequence_Duplication_Levels.csv"
+            ]
+        ],
+        "tab_name": "Duplication Levels",
+        "status": "fail"
+    },
+    {
+        "chart_properties": {
+            "y_label": "Percent",
+            "type": "line",
+            "y_value": [
+                "Illumina Universal",
+                "Illumina Small RNA",
+                "Nextera Transposase",
+                "SOLID Small RNA"
+            ],
+            "x_value": "Position",
+            "x_label": "Position"
+        },
+        "filename": [
+            [
+                "R1",
+                "R1/Adapter_Content.csv"
+            ],
+            [
+                "R2",
+                "R2/Adapter_Content.csv"
+            ]
+        ],
+        "tab_name": "Adapter Content",
+        "status": "pass"
+    }
+]
