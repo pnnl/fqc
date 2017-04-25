@@ -54,10 +54,14 @@ class ChartProperties(object):
             od['x_label'] = self.x_label
         if self.x_value:
             od['x_value'] = self.x_value
+            if not self.x_label:
+                od['x_label'] = self.x_value
         if self.y_label:
             od['y_label'] = self.y_label
         if self.y_value:
             od['y_value'] = self.y_value
+            if not self.y_label:
+                od['y_label'] = self.y_value[0]
         if self.lower_quartile:
             od['lower_quartile'] = self.lower_quartile
         if self.upper_quartile:
