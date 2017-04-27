@@ -23,10 +23,21 @@ https://pnnl.github.io/fqc/
 
 Parsing the table and running `FastQC` is performed with code written for
 Python 3. We recommend using [Anaconda](https://www.continuum.io/downloads) to
-install the FastQC dependency:
+install the FastQC dependency.
+
+## Set Up BIOCONDA channels
 
 ```
-conda install -c bioconda fastqc
+conda config --add channels conda-forge
+conda config --add channels defaults
+conda config --add channels r
+conda config --add channels bioconda
+```
+
+## Install Dependency
+
+```
+conda install fastqc
 ```
 
 
