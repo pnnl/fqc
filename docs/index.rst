@@ -13,6 +13,13 @@ Example Site
 
 https://pnnl.github.io/fqc/
 
+Citation
+````````
+
+Joseph Brown, Meg Pirrung, Lee Ann McCue; FQC Dashboard: integrates FastQC
+results into a web-based, interactive, and extensible FASTQ quality control
+tool. Bioinformatics 2017 doi: `10.1093/bioinformatics/btx373`_
+
 
 .. toctree::
     :maxdepth: 2
@@ -35,3 +42,6 @@ https://pnnl.github.io/fqc/
     plots/line
     plots/plateheatmap
     plots/table
+
+
+.. _10.1093/bioinformatics/btx373: https://doi.org/10.1093/bioinformatics/btx373

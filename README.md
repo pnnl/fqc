@@ -95,3 +95,8 @@ $ fqc qc group sample sample_r1.fastq.gz
 ```
 fqc qc --r2 sample_r2.fastq.gz 2016 sample sample_r1.fastq.gz
 ```
+
+
+# Citation
+
+Joseph Brown, Meg Pirrung, Lee Ann McCue; FQC Dashboard: integrates FastQC results into a web-based, interactive, and extensible FASTQ quality control tool. Bioinformatics 2017 doi: [10.1093/bioinformatics/btx373](https://doi.org/10.1093/bioinformatics/btx373)
