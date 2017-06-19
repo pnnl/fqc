@@ -35,9 +35,9 @@ def run_qc(gid, uid, r1, r2=None, adapter=None, contaminants=None, exclude=[], k
         threads (Optional[str]): number of threads to use
     """
     if not r2:
-        if os.path.exists(r1.replace("_R1", "_R2")):
+        if os.path.exists(r1.replace("_R1", "_R2")) and not r1.replace("_R1", "_R2") == r1:
             r2 = r1.replace("_R1", "_R2")
-        elif os.path.exists(r1.replace("_r1", "_r2")):
+        elif os.path.exists(r1.replace("_r1", "_r2")) and not r1.replace("_r1", "_r2") == r1:
             r2 = r1.replace("_r1", "_r2")
         if r2:
             logging.info("Found R2: %s" % r2)
