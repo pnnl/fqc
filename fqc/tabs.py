@@ -94,10 +94,15 @@ class ChartProperties(object):
 
 
 class WebTab(object):
-    """
-    filename should likely always be a list and then returned as a single item
-    """
     def __init__(self, filename, tab_name="", status="", chart_properties=None):
+        """The object defining a tab in the left pane of the dashboard.
+
+        Args:
+            filename (list): the read index and read index + basename of each file
+            tab_name (Optional[str]): the string displayed in the left tab on the web page
+            status (Optional[str]): tab status -- pass, fail, or warn
+            chart_properties (Optional[str]): ChartProperties object for this tab
+        """
         self.filename = filename
         self.tab_name = tab_name
         self.status = status
@@ -107,6 +112,7 @@ class WebTab(object):
             self.chart_properties = chart_properties
 
     def update_status(self, status):
+        """Updates status to worse condition of either R1 and R2."""
         if not self.status:
             self.status = status
         else:
@@ -149,7 +155,7 @@ class WebTab(object):
             out_dir (str): the base output directory for a uid
 
         Kwargs:
-            anything to pass to pandas.DataFrame
+            pandas.DataFrame.to_csv kwargs
         """
         dfa = pd.read_csv(os.path.join(out_dir, self.filename[0][1]),
                           header=0, names=[self.chart_properties.x_value, 'R1'],
@@ -158,6 +164,7 @@ class WebTab(object):
                           header=0, names=[self.chart_properties.x_value, 'R2'],
                           index_col=self.chart_properties.x_value)
         merged = pd.merge(dfa, dfb, how='outer', left_index=True, right_index=True)
+        # output is malformed when users have short, non-grouped R1 read lengths and grouped R2 read lengths
         merged.to_csv(os.path.join(out_dir, os.path.basename(self.filename[0][1])), na_rep="0", **kwargs)
         # gets converted to string later
         self.filename = ['R1', os.path.basename(self.filename[0][1])]
