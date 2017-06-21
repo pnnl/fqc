@@ -18,7 +18,7 @@ from fqc.utils import add_csv_input, fastqs_from_dir, import_json, parser_file_e
 from fqc.tabs import WebTab, ChartProperties
 
 
-def run_qc(gid, uid, r1, r2=None, adapter=None, contaminants=None, exclude=[], kmers=8, out_dir=".", threads=1):
+def run_qc(gid, uid, r1, r2=None, adapter=None, contaminants=None, exclude=[], kmers=8, out_dir=".", threads=1, keep_tmp=False):
     """Creates output directory tree, handles JSON creation and updating when running QC, and
     executes FastQC.
 
@@ -44,7 +44,7 @@ def run_qc(gid, uid, r1, r2=None, adapter=None, contaminants=None, exclude=[], k
     qc_obj = Fastqc(gid, uid, r1, r2=r2, out_dir=out_dir)
     logging.info("Running FastQC")
     # executes fastqc and writes data tables
-    qc_obj.run(adapter=adapter, contaminants=contaminants, kmers=kmers, threads=threads)
+    qc_obj.run(keep_tmp=keep_tmp, adapter=adapter, contaminants=contaminants, kmers=kmers, threads=threads)
     # exclude user requested tabs
     tabs = []
     for filename, web_tab in qc_obj.tabs.items():
@@ -232,6 +232,7 @@ def main():
         help="parent directory of server; holds 'plot_data' and child folders")
     qc_p.add_argument("-t", "--threads", metavar="INT", type=int, default=0,
         help="number of threads to use; 0 for 'all'")
+    qc_p.add_argument("--keep-tmp", action="store_true", help="save FastQC output files")
 
     # batch qc
     bqc_p.add_argument("gid", metavar="GROUP-ID",
@@ -319,7 +320,7 @@ def main():
     if args.subparser_name == "qc":
         run_qc(args.gid, args.uid, args.r1, r2=args.r2, adapter=args.adapter,
                contaminants=args.contaminants, exclude=args.exclude, kmers=args.kmers,
-               out_dir=args.out_dir, threads=args.threads)
+               out_dir=args.out_dir, threads=args.threads, keep_tmp=args.keep_tmp)
     elif args.subparser_name == "batch-qc":
         run_batch_qc(args.gid, args.input_dir, adapter=args.adapter, contaminants=args.contaminants,
                      exclude=args.exclude, kmers=args.kmers, out_dir=args.out_dir,
