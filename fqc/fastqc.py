@@ -71,16 +71,22 @@ class Fastqc(object):
         filename = name_and_status[0].replace(" ", "_").strip(">>") + ".csv"
         filehandle = open(os.path.join(self.out_dir, read_index, filename), "w")
         # new tab
-        if "R1" in read_index:
-            web_tab = WebTab([read_index, "%s/%s" % (read_index, filename)], status=name_and_status[1])
+        if read_index == "R1":
+            web_tab = WebTab([read_index, "R1/%s" % filename], status=name_and_status[1])
         # R2; look up existing tab and add filename
         else:
-            assert "R2" in read_index
-            web_tab = self.tabs[filename]
-            # list of lists
-            web_tab.filename = [web_tab.filename, [read_index, '%s/%s' % (read_index, filename)]]
-            # set status to worse of R1 and R2
-            web_tab.update_status(name_and_status[1])
+            assert(read_index == "R2")
+            try:
+                web_tab = self.tabs[filename]
+                # list of lists
+                web_tab.filename = [web_tab.filename, ["R2", "R2/%s" % filename]]
+                # set status to worse of R1 and R2
+                web_tab.update_status(name_and_status[1])
+            # R2 has output that is missing from the analysis of R1
+            except KeyError:
+                # new tab, needs empty R1 plot tab
+                web_tab = WebTab([["R1", "R1/%s" % filename], ["R2", "R2/%s" % filename]], status=name_and_status[1])
+
         return filename, filehandle, web_tab
 
     def extract_data(self, out_dir):
@@ -96,6 +102,7 @@ class Fastqc(object):
         indexes = ['R1', 'R2'] if self.r2 else ['R1']
 
         for fastq, idx in zip(fastqs, indexes):
+            logging.debug("Extracting data for FASTQ %s" % fastq)
             for line in self.get_fastqc_data(out_dir, self.out_archive(fastq)):
                 # fastqc version info
                 if line.startswith("##FastQC"): continue
@@ -204,7 +211,7 @@ class Fastqc(object):
                     else:
                         logging.warn("We're not accounting for file named %s" % filename)
                     # add the tab to the site
-                    if "R1" in idx:
+                    if idx == "R1":
                         self.tabs[filename] = web_tab
                 # print the current line to the open file handle as CSV
                 print(*toks, sep=",", file=filehandle)
@@ -214,9 +221,9 @@ class Fastqc(object):
         if self.r2:
             for filename in ["Per_sequence_quality_scores.csv", "Per_sequence_GC_content.csv",
                              "Per_base_N_content.csv", "Sequence_Length_Distribution.csv"]:
-                self.tabs[filename].combine_tables(self.out_dir, float_format=None if "Per_sequence_GC_content.csv" in filename else "%g")
+                self.tabs[filename].combine_tables(self.out_dir, float_format=None if filename == "Per_sequence_GC_content.csv" else "%g")
 
-    def run(self, **kwargs):
+    def run(self, keep_tmp=False, **kwargs):
         """Runs FastQC.
 
         Keyword Args:
@@ -228,6 +235,8 @@ class Fastqc(object):
             sys.exit("`%s` was not found in your PATH." % FASTQC_EXE)
 
         tempd = tempfile.mkdtemp()
+        if keep_tmp:
+            logging.info("Writing temporary files to: %s" % tempd)
         cmd = ["fastqc", "-q", "-o", tempd]
         for k, v in kwargs.items():
             if v:
@@ -245,4 +254,5 @@ class Fastqc(object):
             logging.critical("Command was: %s" % " ".join(cmd))
             raise
         finally:
-            shutil.rmtree(tempd, ignore_errors=True)
+            if not keep_tmp:
+                shutil.rmtree(tempd, ignore_errors=True)
