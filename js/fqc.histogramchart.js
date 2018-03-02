@@ -106,7 +106,7 @@ histogramchart = function(domObjId, chart_properties, filename) {
 
       var xValues = csv.map(function (d) { return d[chart_properties.x_value]; });
 
-      console.log(series)
+      // console.log(series)
 
       $("#"+domObjId).highcharts({
           chart: {
