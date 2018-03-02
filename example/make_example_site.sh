@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -xe
+
 # everything executed in example_workflow.rst
 fqc qc -t 8 -e 'Basic Statistics' \
     -e 'Overrepresented Sequences' \
@@ -21,7 +23,7 @@ fqc add --prepend plot_data/2016/160912_M03018/config.json \
 
 fqc add --x-value WELL_COL --y-value WELL_ROW --value TOTAL_PAIRED_READS \
     --label LABEL \
-    --colors 'UNUSED:#000000' \
+    --label-color LABEL_COLOR \
     plot_data/2016/160912_M03018/config.json \
     'Abundance by Plate' \
     plateheatmap \
@@ -67,14 +69,14 @@ for sample in $samples; do
         if [[ -f data/tables/${shortsample}_plate_${i}.csv ]]; then
             fqc add --x-value WELL_COL --y-value WELL_ROW \
                 --value TOTAL_PAIRED_READS --label LABEL \
-                --colors 'NEG CTRL:#1f77b4,POS CTRL:#d62728,UNUSED:#000000' \
+                --label-color LABEL_COLOR \
                 plot_data/$year/$sample/config.json \
                 'Abundance by Plate' \
                 plateheatmap \
                 data/tables/${shortsample}_plate_*.csv
             fqc add --x-value WELL_COL --y-value WELL_ROW \
                 --value TOTAL_CONTAMINATION --label LABEL \
-                --colors 'NEG CTRL:#1f77b4,POS CTRL:#d62728,UNUSED:#000000' \
+                --label-color LABEL_COLOR \
                 plot_data/$year/$sample/config.json \
                 'Contamination by Plate' \
                 plateheatmap \
