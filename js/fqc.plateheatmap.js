@@ -47,7 +47,7 @@
                 });
 
                 var min = d3.min(data.map(function(d) { return +d.value; }));
-                var max = d3.max(data.map(function(d) { return +d.value; }));
+                var max = d3.mean(data.map(function(d) { return +d.value; })) * 3;
 
                 labels = Object.keys(labels);
                 // console.log(series);
