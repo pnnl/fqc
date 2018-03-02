@@ -1,4 +1,4 @@
-var filePath = "/example/plot_data/"
+var filePath = "/fqc/example/plot_data/"
 var groupsDict = {};
 var groupOptions;
 var uidSelect;
