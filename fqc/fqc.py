@@ -103,8 +103,8 @@ def run_batch_qc(gid, input_dir, adapter=None, contaminants=None, exclude=[], km
 
 def run_add(config, name, plot_type, csv, prepend=False, status=None, x_value=None, y_value=None,
             x_label=None, y_label=None, subtitle=None, lower_quartile=None, upper_quartile=None,
-            mean=None, value=None, label=None, colors=None, step=10, min_value=None, min_color=None,
-            mid_color=None, max_value=None, max_color=None):
+            mean=None, value=None, label=None, step=10, min_value=None, min_color=None,
+            mid_color=None, max_value=None, max_color=None, label_color=None):
     """Copies the CSV into the directory containing the config file if it does not already exist
     there, then either appends an appropriate entry onto the existing config JSON or creates a new
     file.
@@ -128,30 +128,21 @@ def run_add(config, name, plot_type, csv, prepend=False, status=None, x_value=No
         mean (Optional[str]): arearange specific option; header label in CSV for mean value
         value (Optional[str]): value label in CSV to be plotted in heatmap
         label (Optional[str]): optional heatmap label header to mark individual coordinates
-        colors (Optional[str]): optional color definitions for observable labels
         step (Optional[int]): histogram step
         min_value (Optional[int]): optional heatmap minimum value threshold for color map
         min_color (Optional[str]): optional heatmap minimum color
         mid_color (Optional[str]): optional heatmap mid color for color map
         max_value (Optional[int]): optional heatmap maximum value threshold for color map
         max_color (Optional[str]): optional heatmap maximum color
+        label_color (Optional[str]): optional header value for plateheatmap highlight borders
     """
     filename = add_csv_input(csv, os.path.dirname(config))
-    if colors:
-        # '(-)CTRL:#1f77b4,(+)CTRL:#d62728'
-        try:
-            colors_dict = dict([i.split(":") for i in colors.split(",")])
-        except ValueError:
-            logging.warning("Unable to parse colors (%s) in key:value pairs" % colors)
-            colors_dict = None
-        colors = colors_dict
-
     web_tab = WebTab(filename, name, status,
                      ChartProperties(plot_type, subtitle, x_label, x_value, y_label, y_value,
                                      lower_quartile, upper_quartile, mean, value, label,
                                      minimum=min_value, maximum=max_value, min_color=min_color,
-                                     mid_color=mid_color, max_color=max_color, colors=colors,
-                                     step=step))
+                                     mid_color=mid_color, max_color=max_color, step=step,
+                                     label_color=label_color))
 
     # append onto configuration file
     if os.path.exists(config):
@@ -305,8 +296,8 @@ def main():
     # plateheatmap
     heatmap.add_argument("--label", metavar="STR",
         help="optional header label for coordinate highlights within the heatmap")
-    heatmap.add_argument("--colors", metavar="STR",
-        help="optional colors for observable labels, e.g. for NCTRL and PCTRL you would use NCTRL:#1f77b4,PCTRL:#d62728")
+    heatmap.add_argument("--label-color", metavar="STR",
+        help="optional header label for columns containing hex color codes (such as #1f77b4 or #d62728) or primary color definitions (like red or black)")
 
     args = p.parse_args()
 
@@ -330,9 +321,10 @@ def main():
                 status=args.status, x_value=args.x_value, y_value=args.y_value,
                 x_label=args.x_label, y_label=args.y_label, subtitle=args.subtitle,
                 lower_quartile=args.lower_quartile, upper_quartile=args.upper_quartile,
-                value=args.value, label=args.label, colors=args.colors, step=args.step,
-                min_value=args.min_value, min_color=args.min_color, mid_color=args.mid_color,
-                max_value=args.max_value, max_color=args.max_color)
+                value=args.value, label=args.label, step=args.step,
+                min_value=args.min_value, min_color=args.min_color,
+                mid_color=args.mid_color, max_value=args.max_value,
+                max_color=args.max_color, label_color=args.label_color)
     else:
         p.print_help()
 

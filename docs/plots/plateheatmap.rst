@@ -13,15 +13,15 @@ Example Data
 This is an alternate example from the workflow to show how to deal with
 multiple label colors.
 
-+----------+----------+--------------------+----------+
-| WELL_COL | WELL_ROW | TOTAL_PAIRED_READS | LABEL    |
-+==========+==========+====================+==========+
-| 1        | A        | 205                |          |
-+----------+----------+--------------------+----------+
-| 2        | A        | 103                | POS CTRL |
-+----------+----------+--------------------+----------+
-| 3        | A        | 125                | NEG CTRL |
-+----------+----------+--------------------+----------+
++----------+----------+--------------------+----------+-------------+
+| WELL_COL | WELL_ROW | TOTAL_PAIRED_READS | LABEL    | LABEL_COLOR |
++==========+==========+====================+==========+=============+
+| 1        | A        | 205                | sample1  |             |
++----------+----------+--------------------+----------+-------------+
+| 2        | A        | 103                | POS CTRL | #d62728     |
++----------+----------+--------------------+----------+-------------+
+| 3        | A        | 125                | NEG CTRL | #1f77b4     |
++----------+----------+--------------------+----------+-------------+
 
 
 Usage to Add
@@ -31,7 +31,7 @@ Usage to Add
 
     $ fqc add --x-value WELL_COL --y-value WELL_ROW \
           --value TOTAL_PAIRED_READS --label LABEL \
-          --colors 'NEG CTRL:#1f77b4,POS CTRL:#d62728' \
+          --label-color LABEL_COLOR \
           plot_data/2016/160912_M03018/config.json \
           'Abundance by Plate' \
           plateheatmap \
@@ -72,7 +72,9 @@ Chart Properties
 +----------------+----------------------------------------------------------------------------------------------------------+
 | y_value        | the header label defined in filename corresponding to y-values                                           |
 +----------------+----------------------------------------------------------------------------------------------------------+
-| colors         | comma separated list of label (in your data):color value pairs, e.g. 'NEG CTRL:#1f77b4,POS CTRL:#d62728' |
+| label          | the header label defined in filename corresponding to point labels; displayed on hover when specified    |
++----------------+----------------------------------------------------------------------------------------------------------+
+| label_color    | header of column containing colors; acts to color surrounding point to highlight                         |
 +----------------+----------------------------------------------------------------------------------------------------------+
 
 Example JSON entry::
@@ -88,10 +90,7 @@ Example JSON entry::
             "y_label": "WELL_ROW",
             "value": "TOTAL_PAIRED_READS",
             "label": "LABEL",
-            "colors": {
-                "POS CTRL": "#d62728",
-                "NEG CTRL": "#1f77b4"
-            }
+            "label_color": "LABEL_COLOR"
         }
     }
 

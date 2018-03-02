@@ -1,138 +1,145 @@
 (function() {
+    plateheatmap = function(domObjId, chart_properties, filename) {
+        console.log(domObjId);
+        var width = d3.select(".tab-content").node().getBoundingClientRect().width;
+        var colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"];
 
-plateheatmap = function(domObj, chart_properties, filename) {
-  var margin = { top: 50, right: 250, bottom: 100, left: 40 },
-      width = d3.select(".tab-content").node().getBoundingClientRect().width - margin.left - margin.right,
-      colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"];
+        var plateheatmapChart = function(file) {
+            d3.csv(file,
+            function(d) {
+                return {
+                    x: d[chart_properties.x_value],
+                    y: d[chart_properties.y_value],
+                    value: d[chart_properties.value],
+                    label: d[chart_properties.label],
+                    label_color: d[chart_properties.label_color]
+                };
+            },
+            function(error, data) {
+                if (error) throw error;
 
-  var plateheatmapChart = function(file) {
-    d3.csv(file,
-    function(d) {
-      return {
-        x: d[chart_properties.x_value],
-        y: d[chart_properties.y_value],
-        value: d[chart_properties.value],
-        label: d[chart_properties.label]
-      };
-    },
-    function(error, data) {
-      if (error) throw error;
+                var xVals = {};
+                data.forEach(function(d){
+                    xVals[d.x] = 1;
+                });
+                xVals = Object.keys(xVals);
 
-      var xVals = {};
-      data.forEach(function(d){
-        xVals[d.x] = 1;
-      });
-      xVals = Object.keys(xVals);
+                var yVals = {};
+                data.forEach(function(d){
+                    yVals[d.y] = 1;
+                });
+                yVals = Object.keys(yVals);
 
-      var yVals = {};
-      data.forEach(function(d){
-        yVals[d.y] = 1;
-      });
-      yVals = Object.keys(yVals);
+                var labels = {};
+                var series = [];
+                data.forEach(function(d, i){
+                if(d.label)
+                    labels[d.label] = 1;
+                    series[i] = {"x": xVals.indexOf(d.x),
+                                 "y": yVals.indexOf(d.y),
+                                 "value": +d.value,
+                                 "name": d.label,
+                                 "borderColor": d.label_color,
+                                 "borderWidth": d.label_color ? 3 : 0,
+                                 "pointPadding": d.label_color ? 4 : 3
+                    };
+                // console.log(series[i]);
+                });
 
-      var gridSize = Math.floor(width / xVals.length);
-      var buckets = 9;
-      var legendElementWidth = Math.floor(width / (buckets + 1));
-      var legendElementWidth = width / buckets;
-      var height = yVals.length * gridSize;
+                var min = d3.min(data.map(function(d) { return +d.value; }));
+                var max = d3.max(data.map(function(d) { return +d.value; }));
 
-      var tip = d3.tip()
-        .attr('class', 'd3-tip')
-        .html(function(d) { return (d.label ? d.label + ": " : "") + d.value; });
+                labels = Object.keys(labels);
+                // console.log(series);
+                $(function () {
 
-      var svg = domObj.append("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
-          .append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                    $('#'+domObjId).highcharts({
 
-      svg.call(tip);
+                        chart: {
+                            type: 'heatmap',
+                            // marginTop: 40,
+                            // marginBottom: 80,
+                            plotBorderWidth: 0,
+                            width: width,
+                            height: 600
+                        },
 
-      var yLabels = svg.selectAll(".yLabel")
-          .data(yVals)
-          .enter().append("text")
-            .text(function (d) { return d; })
-            .attr("x", 0)
-            .attr("y", function (d, i) { return i * gridSize; })
-            .style("text-anchor", "end")
-            .attr("transform", "translate(-6," + gridSize / 1.5 + ")")
-            .attr("class", "yLabel mono axis");
+                        plotOptions: {
+                            series: {
+                                turboThreshold: 0,
+                                borderRadius: 25,
+                            }
+                        },
 
-      var colorScale = d3.scale.quantile()
-          .domain([0, d3.max(data, function (d) { return +d.value; })])
-          .range(colors);
+                        title: {
+                            text: chart_properties['subtitle']
+                        },
 
-      var cards = svg.selectAll(".y")
-          .data(data, function(d) {return d.y+':'+d.x;});
+                        xAxis: {
+                            categories: xVals,
+                            tickLength: 0,
+                            lineWidth: 0,
+                            minorGridLineWidth: 0,
+                            lineColor: "transparent"
+                        },
 
-      cards.append("title");
+                        yAxis: {
+                            categories: yVals,
+                            title: {
+                                text: null
+                            },
+                            reversed: true,
+                            gridLineColor: "transparent"
+                        },
 
-      var r = gridSize/2 - 4;
+                        colorAxis: {
+                            auxarg: true,
+                            min: min,
+                            max: max,
+                            reversed: false,
+                            startOnTick: false,
+                            endOnTick: false,
+                            stops: [[0.125, colors[0]],
+                                    [0.250, colors[1]],
+                                    [0.375, colors[2]],
+                                    [0.500, colors[3]],
+                                    [0.625, colors[4]],
+                                    [0.750, colors[5]],
+                                    [0.875, colors[6]],
+                                    [1.000, colors[7]]
+                            ],
+                        },
 
-      var xLabels = svg.selectAll(".xLabel")
-          .data(xVals)
-          .enter().append("text")
-            .text(function(d) { return d; })
-            .attr("x", function(d, i) { return i * gridSize; })
-            .attr("y", 0)
-            .style("text-anchor", "left")
-            .attr("transform", "translate(" + gridSize / 2 + ", -6)")
-            .attr("class", "xLabel mono axis")
+                        legend: {
+                            align: 'right',
+                            layout: 'vertical',
+                            margin: 0,
+                            verticalAlign: 'top',
+                            // verticalAlign: 'middle',
+                            y: 25,
+                            symbolHeight: 500
+                        },
 
-      cards.enter().append("circle")
-          .attr("class", function(d) { return "y bordered " + d.class; })
-          .attr("cx", function(d, i) { return (xVals.indexOf(d.x)) * gridSize + r + 10; })
-          .attr("cy", function(d, i) { return (yVals.indexOf(d.y)) * gridSize + r + 10; })
-          .attr("r", r)
-          .attr("width", gridSize)
-          .attr("height", gridSize)
-          .style("fill", colors[0])
-          .style("stroke", function(d) { return d.label ? chart_properties.colors[d.label] : "#f3f3f3"; })
-          .style("stroke-width", function(d) { return d.label ? 5 : 2; })
-          .on('mouseover', tip.show)
-          .on('mouseout', tip.hide);
+                        tooltip: {
+                            formatter:
+                                function () {
+                                    var label = this.point.name ? '<b>Label:</b> ' + this.point.name : "" ;
+                                    return '<b>' + this.series.yAxis.categories[this.point.y] + ':' + this.series.xAxis.categories[this.point.x] + '</b> <br>' +
+                                        '<b>Value:</b> ' + this.point.value + '<br>' + label;
+                                }
+                        },
 
-      cards.transition().duration(1000)
-          .style("fill", function(d) { return colorScale(d.value); });
+                        series: [{
+                            data: series,
+                            dataLabels: {
+                                enabled: false
+                            }
+                        }],
 
-      cards.select("title").text(function(d) { return d.value; });
-
-      cards.exit().remove();
-
-      var legend = svg.selectAll(".legend")
-          .data([0].concat(colorScale.quantiles()), function(d) { return d; });
-
-      legend.enter().append("g")
-          .attr("class", "legend");
-
-      legend.append("rect")
-        .attr("x", function(d, i) { return legendElementWidth * i; })
-        .attr("y", height + 10)
-        .attr("width", legendElementWidth)
-        .attr("height", gridSize / 2)
-        .style("fill", function(d, i) { return colors[i]; });
-
-      legend.append("text")
-        .attr("class", "mono")
-        .text(function(d) { return "≥ " + Math.round(d); })
-        .attr("x", function(d, i) { return legendElementWidth * i; })
-        .attr("y", height + gridSize);
-
-      legend.exit().remove();
-
-    var borderPath = svg.append("rect")
-        .attr("x", 0)
-        .attr("y", 0)
-        .attr("height", height + 10)
-        .attr("width", width)
-        .style("stroke", '#C0C0C0')
-        .style("fill", "none")
-        .style("stroke-width", 1);
-
-    });
-  };
-
-  plateheatmapChart(filePath+filename);
-}
-
+                    });
+                });
+            });
+        };
+        plateheatmapChart(filePath+filename);
+    }
 })();

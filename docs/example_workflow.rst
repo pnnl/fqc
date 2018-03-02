@@ -70,7 +70,8 @@ addition to seeing the effects on neighboring wells. Run 160912 did not
 have any controls, so we'll just add abundance for its plate::
 
     $ fqc add --x-value WELL_COL --y-value WELL_ROW \
-          --value TOTAL_PAIRED_READS --label LABEL --colors 'UNUSED:#000000' \
+          --value TOTAL_PAIRED_READS --label LABEL \
+          --label-color LABEL_COLOR \
           plot_data/2016/160912_M03018/config.json \
           'Abundance by Plate' \
           plateheatmap \

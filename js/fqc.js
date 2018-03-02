@@ -221,7 +221,7 @@ function makeChart(domObjId, chart_properties, filename) {
 	else if(chart_properties.type == "heatmap")
 		heatmap(domObjId, chart_properties, filename)
 	else if(chart_properties.type == "plateheatmap")
-		plateheatmap(domObj, chart_properties, filename)
+		plateheatmap(domObjId, chart_properties, filename)
 	else if(chart_properties.type == "histogram")
 		histogramchart(domObjId, chart_properties, filename)
 	else if(chart_properties.type == "bar")
