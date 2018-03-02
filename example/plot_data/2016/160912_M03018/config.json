@@ -9,19 +9,18 @@
     {
         "filename": "160912_lorenz.csv",
         "chart_properties": {
-            "x_label": "Fraction of Samples",
             "type": "line",
+            "x_label": "Fraction of Samples",
+            "y_label": "Fraction of On Target Reads",
             "y_value": [
                 "Equal",
                 "Actual"
             ],
-            "y_label": "Fraction of On Target Reads",
             "x_value": "FractionOfSamples"
         },
         "tab_name": "Read Distribution"
     },
     {
-        "status": "fail",
         "filename": [
             [
                 "R1",
@@ -32,7 +31,12 @@
                 "R2/Per_base_sequence_quality.csv"
             ]
         ],
+        "status": "fail",
+        "tab_name": "Quality by Position",
         "chart_properties": {
+            "lower_quartile": "Lower Quartile",
+            "type": "arearange",
+            "upper_quartile": "Upper Quartile",
             "x_label": "Position",
             "zones": [
                 {
@@ -47,17 +51,12 @@
                     "color": "#b0e5b1"
                 }
             ],
-            "upper_quartile": "Upper Quartile",
-            "lower_quartile": "Lower Quartile",
-            "type": "arearange",
+            "x_value": "Base",
             "y_label": "Quality (Phred score)",
-            "mean": "Mean",
-            "x_value": "Base"
-        },
-        "tab_name": "Quality by Position"
+            "mean": "Mean"
+        }
     },
     {
-        "status": "fail",
         "filename": [
             [
                 "R1",
@@ -68,35 +67,35 @@
                 "R2/Per_tile_sequence_quality.csv"
             ]
         ],
+        "status": "fail",
+        "tab_name": "Quality by Tile",
         "chart_properties": {
-            "subtitle": "Per Tile Average Quality Deviation",
-            "min": "-10",
             "type": "heatmap",
-            "max": "10",
-            "mid_color": "#ffffff",
-            "y_label": "Tile",
             "max_color": "#dc3912",
-            "x_label": "Position",
-            "y_value": "Tile",
-            "min_color": "#36c",
             "value": "Mean",
-            "x_value": "Base"
-        },
-        "tab_name": "Quality by Tile"
+            "mid_color": "#ffffff",
+            "x_value": "Base",
+            "min": "-10",
+            "y_label": "Tile",
+            "y_value": "Tile",
+            "max": "10",
+            "x_label": "Position",
+            "subtitle": "Per Tile Average Quality Deviation",
+            "min_color": "#36c"
+        }
     },
     {
-        "status": "pass",
         "filename": "Per_sequence_quality_scores.csv",
+        "status": "pass",
+        "tab_name": "Quality by Count",
         "chart_properties": {
-            "x_label": "Mean Sequence Quality",
             "type": "line",
+            "x_label": "Mean Sequence Quality",
             "y_label": "Count",
             "x_value": "Quality"
-        },
-        "tab_name": "Quality by Count"
+        }
     },
     {
-        "status": "fail",
         "filename": [
             [
                 "R1",
@@ -107,45 +106,45 @@
                 "R2/Per_base_sequence_content.csv"
             ]
         ],
+        "status": "fail",
+        "tab_name": "Sequence Content",
         "chart_properties": {
-            "subtitle": "Sequence content across all bases",
-            "x_label": "Position",
             "type": "line",
+            "x_label": "Position",
+            "subtitle": "Sequence content across all bases",
+            "x_value": "Base",
             "y_value": [
                 "G",
                 "A",
                 "T",
                 "C"
             ],
-            "y_label": "Percent",
-            "x_value": "Base"
-        },
-        "tab_name": "Sequence Content"
+            "y_label": "Percent"
+        }
     },
     {
-        "status": "fail",
         "filename": "Per_sequence_GC_content.csv",
+        "status": "fail",
+        "tab_name": "GC Content",
         "chart_properties": {
-            "x_label": "GC Content",
             "type": "line",
+            "x_label": "GC Content",
             "y_label": "Count",
             "x_value": "GC Content"
-        },
-        "tab_name": "GC Content"
+        }
     },
     {
-        "status": "pass",
         "filename": "Per_base_N_content.csv",
+        "status": "pass",
+        "tab_name": "N Content",
         "chart_properties": {
-            "x_label": "Position",
             "type": "line",
+            "x_label": "Position",
             "y_label": "Percent N",
             "x_value": "Base"
-        },
-        "tab_name": "N Content"
+        }
     },
     {
-        "status": "fail",
         "filename": [
             [
                 "R1",
@@ -156,21 +155,21 @@
                 "R2/Sequence_Duplication_Levels.csv"
             ]
         ],
+        "status": "fail",
+        "tab_name": "Duplication Levels",
         "chart_properties": {
-            "subtitle": "26% remaining after deduplication",
-            "x_label": "Duplication Level",
             "type": "line",
+            "x_label": "Duplication Level",
+            "subtitle": "26% remaining after deduplication",
+            "x_value": "Duplication Level",
             "y_value": [
                 "Deduplicated",
                 "Total"
             ],
-            "y_label": "Percent",
-            "x_value": "Duplication Level"
-        },
-        "tab_name": "Duplication Levels"
+            "y_label": "Percent"
+        }
     },
     {
-        "status": "pass",
         "filename": [
             [
                 "R1",
@@ -181,87 +180,114 @@
                 "R2/Adapter_Content.csv"
             ]
         ],
+        "status": "pass",
+        "tab_name": "Adapter Content",
         "chart_properties": {
-            "x_label": "Position",
             "type": "line",
+            "x_label": "Position",
+            "y_label": "Percent",
             "y_value": [
                 "Illumina Universal",
-                "Illumina Small RNA",
+                "Illumina Small RNA 3'",
+                "Illumina Small RNA 5'",
                 "Nextera Transposase",
                 "SOLID Small RNA"
             ],
-            "y_label": "Percent",
             "x_value": "Position"
-        },
-        "tab_name": "Adapter Content"
+        }
     },
     {
         "filename": "160912_plate_1.csv",
         "chart_properties": {
-            "x_label": "WELL_COL",
             "type": "plateheatmap",
+            "x_label": "WELL_COL",
+            "value": "TOTAL_PAIRED_READS",
+            "x_value": "WELL_COL",
+            "label_color": "LABEL_COLOR",
+            "label": "LABEL",
             "y_value": [
                 "WELL_ROW"
             ],
-            "value": "TOTAL_PAIRED_READS",
-            "colors": {
-                "UNUSED": "#000000"
-            },
-            "label": "LABEL",
-            "y_label": "WELL_ROW",
-            "x_value": "WELL_COL"
+            "y_label": "WELL_ROW"
         },
         "tab_name": "Abundance by Plate"
     },
     {
-        "filename": "histogram_example.csv",
+        "filename": "160912_top50barcodes.csv",
         "chart_properties": {
-            "x_label": "Length",
-            "type": "histogram",
-            "step": 10,
+            "type": "bar",
+            "x_label": "Barcode",
             "y_label": "Count",
-            "x_value": "Length"
-        },
-        "tab_name": "Joined Read Lengths"
-    },
-    {
-        "filename": "histogram_example.csv",
-        "chart_properties": {
-            "x_label": "Length",
-            "type": "histogram",
-            "step": 10,
-            "y_label": "Read Count",
-            "x_value": "Length"
-        },
-        "tab_name": "Joined Read Lengths"
-    },
-    {
-        "chart_properties": {
-            "x_label": "Quality",
-            "type": "line",
             "y_value": [
                 "Count"
             ],
-            "y_label": "Count",
-            "x_value": "Quality"
+            "x_value": "Barcode"
         },
-        "filename": "simple_line.csv",
-        "tab_name": "Quality by Position"
+        "tab_name": "Barcode Counts"
     },
     {
-        "filename": "multiple_line.csv",
-        "tab_name": "Content by Position",
+        "filename": "160912_top50barcodes.csv",
         "chart_properties": {
-            "type": "line",
-            "x_label": "Position",
-            "x_value": "Base",
-            "y_label": "Percent",
+            "type": "bar",
+            "x_label": "Barcode",
+            "y_label": "Count",
             "y_value": [
-                "G",
-                "A",
-                "C",
-                "T"
-            ]
+                "Count"
+            ],
+            "x_value": "Barcode"
+        },
+        "tab_name": "Barcode Counts"
+    },
+    {
+        "filename": "160912_top50barcodes.csv",
+        "chart_properties": {
+            "x_value": "Barcode",
+            "x_label": "Barcode",
+            "y_value": [
+                "Count"
+            ],
+            "type": "bar",
+            "y_label": "Count"
+        },
+        "tab_name": "Barcode Counts"
+    },
+    {
+        "filename": "160912_top50barcodes.csv",
+        "chart_properties": {
+            "type": "bar",
+            "x_label": "Barcode",
+            "y_value": [
+                "Count"
+            ],
+            "x_value": "Barcode",
+            "y_label": "Count"
+        },
+        "tab_name": "Barcode Counts"
+    },
+    {
+        "filename": "160912_top50barcodes.csv",
+        "chart_properties": {
+            "type": "bar",
+            "x_label": "Barcode",
+            "y_label": "Count",
+            "y_value": [
+                "Count"
+            ],
+            "x_value": "Barcode"
+        },
+        "tab_name": "Barcode Counts"
+    },
+    {
+        "filename": "160912_top50barcodes.csv",
+        "tab_name": "Barcode Counts",
+        "chart_properties": {
+            "type": "bar",
+            "x_value": "Barcode",
+            "x_label": "Barcode",
+            "y_value": [
+                "Count"
+            ],
+            "y_label": "Count"
         }
     }
 ]
