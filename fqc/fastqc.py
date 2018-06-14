@@ -238,7 +238,7 @@ class Fastqc(object):
         tempd = tempfile.mkdtemp()
         if keep_tmp:
             logging.info("Writing temporary files to: %s" % tempd)
-        cmd = ["fastqc", "-q", "-o", tempd]
+        cmd = [FASTQC_EXE, "-q", "-o", tempd]
         for k, v in kwargs.items():
             if v:
                 cmd.extend(["--%s" % k, "%s" % str(v)])
