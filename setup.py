@@ -20,7 +20,7 @@ setup(
     url='https://github.com/brwnj/fqc',
     license='MIT',
     author='Joe Brown',
-    author_email='joe.brown@pnnl.gov',
+    author_email='brwnjm@gmail.com',
     description='Extensible plotting utility geared towards sequence quality control',
     long_description='',
     packages=['fqc'],
