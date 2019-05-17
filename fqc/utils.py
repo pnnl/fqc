@@ -52,7 +52,7 @@ def fastqs_from_dir(input_dir):
     Returns:
         dict of sample id to file path or list of file paths
     """
-    exts = ['.fastq', '.fq']
+    exts = ['.fastq', '.fq', '.zip']
     input_dir = os.path.abspath(input_dir)
     if not os.path.isdir(input_dir):
         logging.debug("Changing input dir from %s to %s" % (input_dir, os.path.dirname(input_dir)))
@@ -63,12 +63,16 @@ def fastqs_from_dir(input_dir):
     # sample name for files without _r1 or _r2 in the name
     split_pattern = re.compile('(\\%s)' % '|\\'.join(exts))
     # split file name based on _r1 and _r2
-    pattern = re.compile(r'((?:_[rR][12][^_]*))$')
+    pattern = re.compile(r'((?s:.*))_[rR][12]')
 
     for f in os.listdir(input_dir):
         if not any(ext in f for ext in exts): continue
         toks = pattern.split(f)
-        sample_id = toks[0] if len(toks) > 1 else split_pattern.split(f)[0]
+        # found _R1 or _R2
+        if len(toks) == 3:
+            sample_id = toks[1]
+        else:
+            sample_id = split_pattern.split(f)[0]
         if sample_id in pairs:
             if isinstance(pairs[sample_id], list):
                 logging.warning("%s has more than 2 paired fastqs in %s" % (sample_id, input_dir))

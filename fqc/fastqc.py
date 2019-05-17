@@ -54,6 +54,8 @@ class Fastqc(object):
         filename, ext = os.path.splitext(os.path.basename(fastq))
         if ext == ".gz":
             filename, ext = os.path.splitext(filename)
+        elif ext == ".zip":
+            return os.path.basename(fastq)
         if ext in [".fastq", ".fq"]:
             return filename + "_fastqc.zip"
         else:
@@ -232,6 +234,11 @@ class Fastqc(object):
             contaminants (Optional[str]): path to contaminants file
             kmers (Optional[int]): length of kmer for which to look
         """
+        if self.r1 and self.r1.endswith(".zip"):
+            logging.info("Extracting existing FastQC data from %s" % os.path.dirname(self.r1))
+            self.extract_data(os.path.dirname(self.r1))
+            return
+
         if not find_executable(FASTQC_EXE):
             sys.exit("`%s` was not found in your PATH." % FASTQC_EXE)
 
