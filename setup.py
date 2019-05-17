@@ -17,7 +17,7 @@ def get_version(relpath):
 setup(
     name='fqc',
     version=get_version("fqc/__init__.py"),
-    url='https://github.com/brwnj/fqc',
+    url='https://github.com/pnnl/fqc',
     license='MIT',
     author='Joe Brown',
     author_email='brwnjm@gmail.com',
